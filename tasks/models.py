@@ -29,13 +29,23 @@ class Task(models.Model):
         M = "Medium"
         L = "Low"
 
+    class Status(models.TextChoices):
+        todo = "To do"
+        doing = "Doing"
+        done = "Done"
+
     name = models.CharField(max_length=63)
     description = models.TextField()
     deadline = models.DateField()
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(max_length=10,
                                 choices=Priority,
-                                default=Priority.M)
+                                default=Priority.M
+                                )
+    status = models.CharField(max_length=10,
+                              choices=Status,
+                              default=Status.todo
+                              )
     task_type = models.ForeignKey(TaskType,
                                   related_name="tasks",
                                   on_delete=models.SET("")
