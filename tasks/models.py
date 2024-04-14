@@ -50,7 +50,31 @@ class Task(models.Model):
                                   related_name="tasks",
                                   on_delete=models.SET("")
                                   )
-    assignees = models.ManyToManyField(Worker, related_name='tasks')
 
     def __str__(self):
         return f"{self.name} {self.deadline}"
+
+
+class Project(models.Model):
+    name = models.CharField(max_length=63)
+    description = models.TextField()
+    creator = models.ForeignKey(Worker, on_delete=models.CASCADE)
+    assignees = models.ManyToManyField(Worker, related_name="projects")
+
+
+class Chat(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+
+class ChatMessage(models.Model):
+    message = models.TextField()
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    sender = models.ForeignKey(Worker, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+
+
+class TaskComment(models.Model):
+    message = models.TextField()
+    sender = models.ForeignKey(Worker, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
