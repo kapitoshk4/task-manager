@@ -1,0 +1,13 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  {% if task_list %}
+    <ul>
+      {% for task in task_list %}
+        <li>
+          {{ task.name }} ({{ task.deadline }})
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
