@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from task_manager import settings
+
 
 class Position(models.Model):
     name = models.CharField(max_length=63)
@@ -58,8 +60,8 @@ class Worker(AbstractUser):
 class Project(models.Model):
     name = models.CharField(max_length=63)
     description = models.TextField()
-    creator = models.ForeignKey(Worker, on_delete=models.CASCADE)
-    assignees = models.ManyToManyField(Worker, related_name="projects")
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
 
 
 class Chat(models.Model):
@@ -69,12 +71,12 @@ class Chat(models.Model):
 class ChatMessage(models.Model):
     message = models.TextField()
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
-    sender = models.ForeignKey(Worker, on_delete=models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
 
 
 class TaskComment(models.Model):
     message = models.TextField()
-    sender = models.ForeignKey(Worker, on_delete=models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
