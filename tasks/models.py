@@ -18,9 +18,9 @@ class TaskType(models.Model):
 
 class Task(models.Model):
     class Priority(models.TextChoices):
-        H = "High"
-        M = "Medium"
-        L = "Low"
+        High = "High"
+        Medium = "Medium"
+        Low = "Low"
 
     class Status(models.TextChoices):
         todo = "To do"
@@ -30,10 +30,9 @@ class Task(models.Model):
     name = models.CharField(max_length=63)
     description = models.TextField()
     deadline = models.DateField()
-    is_completed = models.BooleanField(default=False)
     priority = models.CharField(max_length=10,
                                 choices=Priority,
-                                default=Priority.M
+                                default=Priority.Medium
                                 )
     status = models.CharField(max_length=10,
                               choices=Status,
