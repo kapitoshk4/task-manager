@@ -3,12 +3,12 @@
 <nav class="pcoded-navbar">
   <div class="navbar-wrapper">
     <div class="navbar-brand header-logo">
-{#      <a href="{% url 'index' %}" class="b-brand">#}
-{#        <div class="b-bg">#}
-{#          <i class="feather icon-trending-up"></i>#}
-{#        </div>#}
-{#        <span class="b-title">Datta Able</span>#}
-{#      </a>#}
+      <a href="{% url 'index' %}" class="b-brand">
+        <div class="b-bg">
+          <i class="feather icon-trending-up"></i>
+        </div>
+        <span class="b-title">Task Manager</span>
+      </a>
       <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
     </div>
     <div class="navbar-content scroll-div">
@@ -17,21 +17,21 @@
           <label>Navigation</label>
         </li>
         <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item {% if 'index' in segment %}active{% endif %}">
-{#          {% if request.user.is_superuser %}#}
-{#          <a href="{% url 'admin:index' %}" class="nav-link ">#}
-{#          {% else %}#}
-{#          <a href="{% url 'index' %}" class="nav-link ">#}
-{#          {% endif %}#}
-{#            <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Dashboard</span>#}
-{#          </a>#}
+          {% if request.user.is_superuser %}
+          <a href="#" class="nav-link ">
+          {% else %}
+          <a href="{% url 'index' %}" class="nav-link ">
+          {% endif %}
+            <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Projects</span>
+          </a>
         </li>
         <li class="nav-item {% if 'tables' in segment %}active{% endif %}">
-{#          <a href="{% url 'tables' %}" class="nav-link "><span class="pcoded-micon"><i#}
+          <a href="#" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-server text-c-green"></i></span><span class="pcoded-mtext">Dynamic Tables</span></a>
         </li>
         <li class="nav-item">
-{#          <a target="_blank" href="/api/product/" class="nav-link "><span class="pcoded-micon"><i#}
-{#                class="feather icon-zap text-c-green"></i></span><span class="pcoded-mtext">Generated API</span></a>#}
+          <a target="_blank" href="#" class="nav-link "><span class="pcoded-micon"><i
+                class="feather icon-zap text-c-green"></i></span><span class="pcoded-mtext">Generated API</span></a>
         </li>
 
         {% if not request.user.is_authenticated %}
@@ -40,10 +40,10 @@
           class="nav-item pcoded-hasmenu">
           <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
-{#          <ul class="pcoded-submenu">#}
-{#            <li class=""><a href="{% url 'login' %}" class="">Sign IN</a></li>#}
-{#            <li class=""><a href="{% url 'register' %}" class="">Sign UP</a></li>#}
-{#          </ul>#}
+          <ul class="pcoded-submenu">
+            <li class=""><a href="#" class="">Sign IN</a></li>
+            <li class=""><a href="#" class="">Sign UP</a></li>
+          </ul>
         </li>
         {% endif %}
 
