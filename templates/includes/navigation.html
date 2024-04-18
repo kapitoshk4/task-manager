@@ -17,14 +17,6 @@
     <ul class="navbar-nav mr-auto">
       <li><a href="javascript:" class="full-screen" onclick="javascript:toggleFullScreen()"><i
             class="feather icon-maximize"></i></a></li>
-      <li class="nav-item dropdown">
-        <a class="dropdown-toggle" href="javascript:" data-toggle="dropdown">Dropdown</a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="javascript:">Action</a></li>
-          <li><a class="dropdown-item" href="javascript:">Another action</a></li>
-          <li><a class="dropdown-item" href="javascript:">Something else here</a></li>
-        </ul>
-      </li>
       <li class="nav-item">
         <div class="main-search">
           <div class="input-group">
@@ -66,9 +58,11 @@
                 <div class="media">
                   <img class="img-radius" src="{% static 'assets/images/user/avatar-1.jpg' %}" alt="Generic placeholder image">
                   <div class="media-body">
-                    <p><strong>John Doe</strong><span class="n-time text-muted"><i
-                          class="icon feather icon-clock m-r-10"></i>30 min</span></p>
-                    <p>New ticket Added</p>
+                    {% if user.is_authenticated %}
+                      <p><strong>{{ user.get_username }}</strong><span class="n-time text-muted"><i
+                            class="icon feather icon-clock m-r-10"></i>30 min</span></p>
+                      <p>New ticket Added</p>
+                    {% endif %}
                   </div>
                 </div>
               </li>
@@ -103,20 +97,17 @@
         </div>
       </li>
       <li>
+        
         <div class="dropdown drp-user">
           <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">
             <i class="icon feather icon-settings"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right profile-notification">
             <div class="pro-head">
+              {% if user.is_authenticated %}
               <img src="{% static 'assets/images/user/avatar-1.jpg' %}" class="img-radius" alt="User-Profile-Image">
-              <span>John Doe</span>
-              {% if request.user.is_authenticated %}
-                {% if request.user.is_superuser %}
-                <a href="{% url 'admin:logout' %}" class="dud-logout" title="Logout">
-                {% else %}
+              <span>{{ user.get_username }}</span>
                 <a href="{% url 'logout' %}" class="dud-logout" title="Logout">
-                {% endif %}
                   <i class="feather icon-log-out"></i>
                 </a>
               {% endif %}
@@ -133,9 +124,9 @@
               {% if request.user.is_authenticated %}
               <li>
                 {% if request.user.is_superuser %}
-                <a href="{% url 'admin:password_change' %}" class="dropdown-item">
+                <a href="#" class="dropdown-item">
                 {% else %}
-                <a href="{% url 'password_change' %}" class="dropdown-item">
+                <a href="#" class="dropdown-item">
                 {% endif %}
                   <i class="feather icon-edit"></i>Change Password
                 </a>
