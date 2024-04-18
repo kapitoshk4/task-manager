@@ -9,9 +9,11 @@ from tasks.models import Task, Project
 
 
 def index(request):
-    projects = Project.objects.all()
+    num_projects = Project.objects.count()
+    num_tasks = Task.objects.count()
     context = {
-        "projects": projects
+        "num_projects": num_projects,
+        "num_tasks": num_tasks
     }
 
     return render(request, "tasks/index.html", context)
