@@ -18,7 +18,7 @@ class TaskAdmin(admin.ModelAdmin):
 
 
 @admin.register(Worker)
-class Worker(UserAdmin):
+class WorkerAdmin(UserAdmin):
     list_display = UserAdmin.list_display + ("position", )
     add_fieldsets = UserAdmin.add_fieldsets + (
         (
@@ -26,6 +26,8 @@ class Worker(UserAdmin):
                 "Additional info",
                 {
                     "fields": (
+                        "first_name",
+                        "last_name",
                         "position",
                     )
                 },
@@ -35,7 +37,7 @@ class Worker(UserAdmin):
 
 
 @admin.register(Project)
-class Project(admin.ModelAdmin):
+class ProjectAdmin(admin.ModelAdmin):
     list_display = ["name", "description", "creator", ]
     search_fields = ["name", ]
 
