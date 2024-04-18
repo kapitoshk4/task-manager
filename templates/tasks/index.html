@@ -1,8 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block breadcrumbs %}{% endblock breadcrumbs %}
-
 {% block content %}
   {% if request.user.is_authenticated %}
   <!-- [ Main Content ] start -->
@@ -39,6 +37,7 @@
       </div>
     </div>
     <!--[ Monthly  sales section ] end-->
+  </div>
   {% endif %}
 {% endblock %}
 <!-- [ Main Content ] end -->
