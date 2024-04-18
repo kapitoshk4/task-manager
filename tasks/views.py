@@ -1,8 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.views import generic
 from django.views.generic import ListView
 
+from tasks.forms import LoginForm
 from tasks.models import Task, Project
 
 
@@ -13,6 +15,11 @@ def index(request):
     }
 
     return render(request, "tasks/index.html", context)
+
+
+class UserLoginView(LoginView):
+    template_name = 'accounts/login.html'
+    form_class = LoginForm
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
