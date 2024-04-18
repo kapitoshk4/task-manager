@@ -19,38 +19,42 @@ class TaskType(models.Model):
 
 
 class Task(models.Model):
-    class Priority(models.TextChoices):
-        High = "High"
-        Medium = "Medium"
-        Low = "Low"
+    HIGH = "H"
+    MEDIUM = "M"
+    LOW = "L"
 
-    class Status(models.TextChoices):
-        todo = "To do"
-        doing = "Doing"
-        done = "Done"
+    PRIORITY_CHOICES = [
+        (HIGH, "High"),
+        (MEDIUM, "Medium"),
+        (LOW, "Low"),
+    ]
+
+    TODO = "TD"
+    DOING = "DG"
+    DONE = "DE"
+
+    STATUS_CHOICES = [
+        (TODO, "To do"),
+        (DOING, "Doing"),
+        (DONE, "Done"),
+    ]
 
     name = models.CharField(max_length=63)
     description = models.TextField()
     deadline = models.DateField()
-    priority = models.CharField(max_length=10,
-                                choices=Priority,
-                                default=Priority.Medium
-                                )
-    status = models.CharField(max_length=10,
-                              choices=Status,
-                              default=Status.todo
-                              )
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default=MEDIUM)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=TODO)
     task_type = models.ForeignKey(TaskType,
                                   related_name="tasks",
-                                  on_delete=models.SET("")
-                                  )
+                                  on_delete=models.SET_NULL,
+                                  null=True)
 
     def __str__(self):
         return f"{self.name} {self.deadline}"
 
 
 class Worker(AbstractUser):
-    position = models.ForeignKey(Position, on_delete=models.CASCADE)
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, null=True, blank=True)
     tasks = models.ManyToManyField(Task, related_name="workers")
 
     def __str__(self):
