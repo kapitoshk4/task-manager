@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.db.models import Count
@@ -10,6 +11,7 @@ from tasks.forms import LoginForm
 from tasks.models import Task, Project
 
 
+@login_required
 def index(request):
     num_projects = Project.objects.count()
     num_tasks = Task.objects.count()
@@ -37,7 +39,14 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "project_list"
     template_name = "tasks/project_list.html"
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.annotate(num_assignees=Count("assignees"))
-        return queryset
+
+@login_required
+def project_detail(request, pk):
+    project = Project.objects.get(id=pk)
+
+    context = {
+        "project": project,
+        "show_tabs": True
+    }
+
+    return render(request, "tasks/project_detail.html", context)
