@@ -1,8 +1,9 @@
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.db.models import Count
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic import ListView
 
@@ -26,6 +27,11 @@ def index(request):
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
     form_class = LoginForm
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("/login/")
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
