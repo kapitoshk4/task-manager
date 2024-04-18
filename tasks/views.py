@@ -3,7 +3,16 @@ from django.shortcuts import render
 from django.views import generic
 from django.views.generic import ListView
 
-from tasks.models import Task
+from tasks.models import Task, Project
+
+
+def index(request):
+    projects = Project.objects.all()
+    context = {
+        "projects": projects
+    }
+
+    return render(request, "tasks/index.html", context)
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
