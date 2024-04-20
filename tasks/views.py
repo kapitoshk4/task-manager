@@ -46,6 +46,12 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "project_list"
     template_name = "tasks/project_list.html"
 
+    def get_queryset(self):
+        return (
+                Project.objects.filter(creator=self.request.user) |
+                Project.objects.filter(assignees=self.request.user)
+        )
+
 
 @login_required
 def project_detail(request, pk):
