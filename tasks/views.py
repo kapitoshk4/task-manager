@@ -2,13 +2,11 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic import ListView
+from django.http import HttpResponseForbidden
 
-from tasks import models
 from tasks.forms import LoginForm, ProjectForm
 from tasks.models import Task, Project
 
@@ -83,6 +81,11 @@ class ProjectUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Project
     form_class = ProjectForm
     success_url = reverse_lazy("tasks:project-list")
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().creator != self.request.user:
+            return HttpResponseForbidden("You do not have permission to this project.")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
