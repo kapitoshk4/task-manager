@@ -2,7 +2,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseForbidden
@@ -56,14 +56,16 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
 
 @login_required
 def project_detail(request, pk):
-    project = Project.objects.get(id=pk)
+    project = get_object_or_404(Project, id=pk)
 
-    context = {
-        "project": project,
-        "show_tabs": True
-    }
+    if request.user == project.creator or request.user in project.assignees.all():
+        context = {
+            "project": project,
+            "show_tabs": True
+        }
 
-    return render(request, "tasks/project_detail.html", context)
+        return render(request, "tasks/project_detail.html", context)
+    return HttpResponseForbidden("You do not have permission to this project.")
 
 
 class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
