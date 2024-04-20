@@ -33,7 +33,7 @@
       </div>
     {% if user == project.creator %}
       <span>
-        <a href="#" class="btn btn-warning link-to-page">
+        <a href="{% url 'tasks:project-update' pk=project.id %}" class="btn btn-warning link-to-page">
           Update
         </a>
         <a href="#" class="btn btn-danger link-to-page">
