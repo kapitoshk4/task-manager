@@ -94,3 +94,7 @@ class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Project
     success_url = reverse_lazy("tasks:project-list")
 
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().creator != self.request.user:
+            return HttpResponseForbidden("You do not have permission to this project.")
+        return super().dispatch(request, *args, **kwargs)
