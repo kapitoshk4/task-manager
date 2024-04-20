@@ -9,6 +9,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from tasks.models import Project
 
 
 class LoginForm(AuthenticationForm):
@@ -22,3 +23,20 @@ class LoginForm(AuthenticationForm):
       strip=False,
       widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
     )
+
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ["name", "description"]
+
+    name = forms.CharField(label=_("Title"),
+                           widget=forms.TextInput(attrs={
+                               "class": "form-control",
+                               "placeholder": ""
+                           }))
+    description = forms.CharField(label=_("Description"),
+                                  widget=forms.Textarea(attrs={
+                                      "class": "form-control",
+                                      "placeholder": ""
+                                  }))
