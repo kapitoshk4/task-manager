@@ -3,7 +3,7 @@
 <header class="navbar pcoded-header navbar-expand-lg navbar-light">
   <div class="m-header">
     <a class="mobile-menu" id="mobile-collapse1" href="javascript:"><span></span></a>
-    <a href="{% url 'index' %}" class="b-brand">
+    <a href="{% url 'tasks:index' %}" class="b-brand">
       <div class="b-bg">
         <i class="feather icon-trending-up"></i>
       </div>
@@ -107,7 +107,7 @@
               {% if user.is_authenticated %}
               <img src="{% static 'assets/images/user/avatar-1.jpg' %}" class="img-radius" alt="User-Profile-Image">
               <span>{{ user.get_username }}</span>
-                <a href="{% url 'logout' %}" class="dud-logout" title="Logout">
+                <a href="{% url 'tasks:logout' %}" class="dud-logout" title="Logout">
                   <i class="feather icon-log-out"></i>
                 </a>
               {% endif %}
