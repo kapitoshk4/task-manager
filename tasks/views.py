@@ -68,3 +68,9 @@ class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.creator_id = self.request.user.id
         return super().form_valid(form)
+
+
+class ProjectUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Project
+    form_class = ProjectForm
+    success_url = reverse_lazy("tasks:project-list")
