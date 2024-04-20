@@ -15,7 +15,10 @@ from tasks.models import Task, Project
 
 @login_required
 def index(request):
-    num_projects = Project.objects.count()
+    num_projects = (
+            Project.objects.filter(creator=request.user).count() +
+            Project.objects.filter(assignees=request.user).distinct().count()
+    )
     num_tasks = Task.objects.count()
     context = {
         "num_projects": num_projects,
