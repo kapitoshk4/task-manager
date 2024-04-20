@@ -3,7 +3,7 @@
 <nav class="pcoded-navbar">
   <div class="navbar-wrapper">
     <div class="navbar-brand header-logo">
-      <a href="{% url 'index' %}" class="b-brand">
+      <a href="{% url 'tasks:index' %}" class="b-brand">
         <div class="b-bg">
           <i class="feather icon-trending-up"></i>
         </div>
@@ -17,18 +17,18 @@
           <label>Navigation</label>
         </li>
         <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
-          <a href="{% url 'project-list' %}" class="nav-link ">
+          <a href="{% url 'tasks:project-list' %}" class="nav-link ">
             <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Projects</span>
           </a>
         </li>
         {% if show_tabs %}
           <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
-            <a href="{% url 'project-list' %}" class="nav-link ">
+            <a href="{% url 'tasks:project-list' %}" class="nav-link ">
               <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Tasks</span>
             </a>
           </li>
           <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
-            <a href="{% url 'project-list' %}" class="nav-link ">
+            <a href="{% url 'tasks:project-list' %}" class="nav-link ">
               <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Chat</span>
             </a>
           </li>
@@ -41,7 +41,7 @@
           <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
           <ul class="pcoded-submenu">
-            <li class=""><a href="{% url 'login' %}" class="">Sign IN</a></li>
+            <li class=""><a href="{% url 'tasks:login' %}" class="">Sign IN</a></li>
             <li class=""><a href="#" class="">Sign UP</a></li>
           </ul>
         </li>
@@ -97,7 +97,7 @@
                 class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
           <ul class="pcoded-submenu">
             <li class=""><a href="#" class="" target="_blank">Sign up</a></li>
-            <li class=""><a href="{% url 'login' %}" class="" target="_blank">Sign in</a></li>
+            <li class=""><a href="{% url 'tasks:login' %}" class="" target="_blank">Sign in</a></li>
           </ul>
         </li>
         <li data-username="Profile Page" class="nav-item {% if 'profile' in segment %}active{% endif %}"><a href="#" class="nav-link"><span
