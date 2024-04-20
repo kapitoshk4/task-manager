@@ -74,3 +74,9 @@ class ProjectUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Project
     form_class = ProjectForm
     success_url = reverse_lazy("tasks:project-list")
+
+
+class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Project
+    success_url = reverse_lazy("tasks:project-list")
+
