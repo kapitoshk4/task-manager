@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 from task_manager import settings
 
@@ -69,6 +70,9 @@ class Project(models.Model):
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
     invitation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse("tasks:project-detail", kwargs={"pk": self.pk})
 
 
 class Chat(models.Model):
