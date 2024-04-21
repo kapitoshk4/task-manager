@@ -121,16 +121,21 @@ def generate_code_view(request, pk):
 @login_required
 def join_project_view(request):
     form = JoinProjectForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        invitation_code = request.POST.get("invitation_code")
-        try:
-            project = Project.objects.get(invitation_code=invitation_code)
-        except Project.DoesNotExist:
-            messages.error(request, "Invalid invitation code.")
-            return redirect("tasks:project-join")
-        if project.assignees.filter(id=request.user.id).exists():
-            messages.warning(request, "You are already a member of this project.")
-            return redirect("tasks:project-join")
-        project.assignees.add(request.user)
-        return redirect(project.get_absolute_url())
+    if request.method == "POST":
+        if form.is_valid():
+            invitation_code = request.POST.get("invitation_code")
+            try:
+                project = Project.objects.get(invitation_code=invitation_code)
+            except Project.DoesNotExist:
+                messages.warning(request, "Invalid invitation code.")
+                return redirect("tasks:project-join")
+            if project.assignees.filter(id=request.user.id).exists():
+                messages.warning(request, "You are already a member of this project.")
+                return redirect("tasks:project-join")
+            project.assignees.add(request.user)
+            return redirect(project.get_absolute_url())
+        else:
+            error_message = form.errors.get("invitation_code")
+            if error_message:
+                messages.warning(request, error_message)
     return render(request, "tasks/project_join_form.html", {"form": form})
