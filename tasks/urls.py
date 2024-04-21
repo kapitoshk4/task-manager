@@ -8,7 +8,9 @@ from tasks.views import (
     ProjectListView,
     project_detail,
     ProjectCreateView,
-    ProjectUpdateView, ProjectDeleteView
+    ProjectUpdateView,
+    ProjectDeleteView,
+    generate_code_view
 )
 
 urlpatterns = [
@@ -37,7 +39,10 @@ urlpatterns = [
          ),
     path("projects/<int:pk>/delete",
          ProjectDeleteView.as_view(),
-         name="project-delete")
+         name="project-delete"),
+    path("projects/<int:pk>/invitation",
+         generate_code_view,
+         name="project-invitation")
 ]
 
 app_name = "tasks"
