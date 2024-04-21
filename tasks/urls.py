@@ -10,7 +10,8 @@ from tasks.views import (
     ProjectCreateView,
     ProjectUpdateView,
     ProjectDeleteView,
-    generate_code_view
+    generate_code_view,
+    join_project_view
 )
 
 urlpatterns = [
@@ -42,7 +43,10 @@ urlpatterns = [
          name="project-delete"),
     path("projects/<int:pk>/invitation",
          generate_code_view,
-         name="project-invitation")
+         name="project-invitation"),
+    path("projects/join",
+         join_project_view,
+         name="project-join")
 ]
 
 app_name = "tasks"
