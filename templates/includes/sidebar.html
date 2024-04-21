@@ -18,7 +18,12 @@
         </li>
         <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
           <a href="{% url 'tasks:project-list' %}" class="nav-link ">
-            <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Projects</span>
+            <span class="pcoded-micon"><i class="feather icon-folder"></i></span><span class="pcoded-mtext">Projects</span>
+          </a>
+        </li>
+        <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
+          <a href="{% url 'tasks:project-join' %}" class="nav-link ">
+            <span class="pcoded-micon"><i class="feather icon-plus"></i></span><span class="pcoded-mtext">Join Project</span>
           </a>
         </li>
         {% if show_tabs %}
@@ -77,7 +82,7 @@
           {% endfor %}
         {% endif %}
 
-        {% if request.user.is_authenticated and not request.user.is_superuser %}
+        {% if request.user.is_authenticated %}
         <li class="nav-item pcoded-menu-caption">
           <label>UI Element</label>
         </li>
