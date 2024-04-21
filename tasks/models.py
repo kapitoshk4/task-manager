@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -66,6 +68,7 @@ class Project(models.Model):
     description = models.TextField()
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
+    invitation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, blank=True)
 
 
 class Chat(models.Model):
