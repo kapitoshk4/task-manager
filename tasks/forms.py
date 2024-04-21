@@ -9,6 +9,8 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
+
 from tasks.models import Project
 
 
@@ -34,12 +36,14 @@ class ProjectForm(forms.ModelForm):
                            widget=forms.TextInput(attrs={
                                "class": "form-control",
                                "placeholder": ""
-                           }))
+                           }),
+                           required=True)
     description = forms.CharField(label=_("Description"),
                                   widget=forms.Textarea(attrs={
                                       "class": "form-control",
                                       "placeholder": ""
-                                  }))
+                                  }),
+                                  required=True)
 
 
 class JoinProjectForm(forms.Form):
@@ -47,4 +51,13 @@ class JoinProjectForm(forms.Form):
                                       widget=forms.TextInput(attrs={
                                           "class": "form-control",
                                           "placeholder": ""
-                                      }))
+                                      }),
+                                      max_length=32)
+
+    def clean(self):
+        super(JoinProjectForm, self).clean()
+
+        invitation_code = self.cleaned_data.get("invitation_code")
+
+        if len(invitation_code) != 32:
+            self.add_error("invitation_code", "Ensure your invitation code is 32 characters long")
