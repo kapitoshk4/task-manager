@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -98,3 +100,17 @@ class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
         if self.get_object().creator != self.request.user:
             return HttpResponseForbidden("You do not have permission to this project.")
         return super().dispatch(request, *args, **kwargs)
+
+
+@login_required
+def generate_code_view(request, pk):
+    project = get_object_or_404(Project, id=pk)
+    if request.user != project.creator:
+        return HttpResponseForbidden("You do not have permission to this project.")
+
+    project.invitation_code = uuid.uuid4()
+    project.save()
+    context = {
+        "project": project
+    }
+    return render(request, "tasks/project_invitation.html", context)
