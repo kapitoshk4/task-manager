@@ -1,15 +1,17 @@
 import uuid
 
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseForbidden
 
-from tasks.forms import LoginForm, ProjectForm
+from tasks.forms import LoginForm, ProjectForm, JoinProjectForm
 from tasks.models import Task, Project
 
 
@@ -114,3 +116,21 @@ def generate_code_view(request, pk):
         "project": project
     }
     return render(request, "tasks/project_invitation.html", context)
+
+
+@login_required
+def join_project_view(request):
+    form = JoinProjectForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        invitation_code = request.POST.get("invitation_code")
+        try:
+            project = Project.objects.get(invitation_code=invitation_code)
+        except Project.DoesNotExist:
+            messages.error(request, "Invalid invitation code.")
+            return redirect("tasks:project-join")
+        if project.assignees.filter(id=request.user.id).exists():
+            messages.warning(request, "You are already a member of this project.")
+            return redirect("tasks:project-join")
+        project.assignees.add(request.user)
+        return redirect(project.get_absolute_url())
+    return render(request, "tasks/project_join_form.html", {"form": form})
