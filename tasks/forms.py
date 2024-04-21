@@ -40,3 +40,11 @@ class ProjectForm(forms.ModelForm):
                                       "class": "form-control",
                                       "placeholder": ""
                                   }))
+
+
+class JoinProjectForm(forms.Form):
+    invitation_code = forms.CharField(label=_("Invitation"),
+                                      widget=forms.TextInput(attrs={
+                                          "class": "form-control",
+                                          "placeholder": ""
+                                      }))
