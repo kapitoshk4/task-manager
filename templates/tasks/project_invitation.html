@@ -1,0 +1,25 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+  <!-- [ Main Content ] start -->
+    <div class="page-header-title">
+      <h2 class="m-b-20">Invitation Code</h2>
+    </div>
+      <div class="row">
+        <!-- [ basic-table ] start -->
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header">
+              <h5>
+                {{ project.invitation_code }}
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- [ basic-table ] end -->
+  {% endif %}
+{% endblock %}
+<!-- [ Main Content ] end -->
