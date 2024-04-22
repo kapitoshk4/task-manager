@@ -83,18 +83,6 @@
         {% endif %}
 
         {% if request.user.is_authenticated %}
-        <li class="nav-item pcoded-menu-caption">
-          <label>UI Element</label>
-        </li>
-        <li class="nav-item pcoded-menu-caption">
-          <label>Forms & table</label>
-        </li>
-        <li class="nav-item pcoded-menu-caption">
-          <label>Chart & Maps</label>
-        </li>
-        <li class="nav-item pcoded-menu-caption">
-          <label>Pages</label>
-        </li>
         <li
           data-username="Authentication Sign up Sign in reset password Change password Personal information profile settings map form subscribe"
           class="nav-item pcoded-hasmenu">
@@ -108,10 +96,6 @@
         <li data-username="Profile Page" class="nav-item {% if 'profile' in segment %}active{% endif %}"><a href="#" class="nav-link"><span
               class="pcoded-micon"><i class="feather icon-user"></i></span><span class="pcoded-mtext">Profile
               Page</span></a>
-        </li>
-        <li data-username="Disabled Menu" class="nav-item disabled"><a href="javascript:" class="nav-link"><span
-              class="pcoded-micon"><i class="feather icon-power"></i></span><span class="pcoded-mtext">Disabled
-              menu</span></a>
         </li>
         {% endif %}
       </ul>
