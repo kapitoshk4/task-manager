@@ -22,15 +22,18 @@
           <div class="main-body">
             <div class="page-wrapper">
               {% block content %}{% endblock content %}
+              {% block pagination %}
+                {% include "includes/pagination.html" %}
+              {% endblock %}
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
   {% include 'includes/scripts.html' %}
   {% block extra_js %}{% endblock extra_js %}
+  
 
 </body>
 </html>
