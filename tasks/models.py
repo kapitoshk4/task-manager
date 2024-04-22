@@ -71,6 +71,9 @@ class Project(models.Model):
     assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
     invitation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, blank=True)
 
+    class Meta:
+        ordering = ("name", )
+
     def get_absolute_url(self):
         return reverse("tasks:project-detail", kwargs={"pk": self.pk})
 
