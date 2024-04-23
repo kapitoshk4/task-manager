@@ -11,8 +11,8 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseForbidden
 
-from tasks.forms import LoginForm, ProjectForm, JoinProjectForm
-from tasks.models import Task, Project
+from tasks.forms import LoginForm, ProjectForm, JoinProjectForm, ChatMessageForm
+from tasks.models import Task, Project, ChatMessage
 
 
 @login_required
@@ -140,3 +140,29 @@ def join_project_view(request):
             if error_message:
                 messages.warning(request, error_message)
     return render(request, "tasks/project_join_form.html", {"form": form})
+
+
+class ChatMessagesView(LoginRequiredMixin, generic.DetailView):
+    model = Project
+    template_name = "tasks/chat_messages.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        messages_connected = ChatMessage.objects.filter(
+            project=self.get_object()
+        )
+        data["messages"] = messages_connected
+
+        if self.request.user.is_authenticated:
+            data["message_form"] = ChatMessageForm()
+
+        return data
+
+    def post(self, request, *args, **kwargs):
+        project_object = self.get_object()
+        new_message = ChatMessage(message=request.POST.get("message"),
+                                  sender=self.request.user,
+                                  project=project_object)
+        new_message.save()
+        return redirect("tasks:project-chat", pk=project_object.pk)
