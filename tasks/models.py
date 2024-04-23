@@ -69,7 +69,7 @@ class Project(models.Model):
     description = models.TextField()
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
-    invitation_code = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, blank=True)
+    invitation_code = models.UUIDField(editable=False, unique=True, null=True, blank=True)
 
     class Meta:
         ordering = ("name", )
@@ -78,13 +78,9 @@ class Project(models.Model):
         return reverse("tasks:project-detail", kwargs={"pk": self.pk})
 
 
-class Chat(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-
-
 class ChatMessage(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="messages")
     message = models.TextField()
-    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
 
