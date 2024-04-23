@@ -11,7 +11,8 @@ from tasks.views import (
     ProjectUpdateView,
     ProjectDeleteView,
     generate_code_view,
-    join_project_view
+    join_project_view,
+    ChatMessagesView,
 )
 
 urlpatterns = [
@@ -46,7 +47,10 @@ urlpatterns = [
          name="project-invitation"),
     path("projects/join",
          join_project_view,
-         name="project-join")
+         name="project-join"),
+    path("projects/<int:pk>/chat",
+         ChatMessagesView.as_view(),
+         name="project-chat")
 ]
 
 app_name = "tasks"
