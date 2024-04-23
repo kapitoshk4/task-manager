@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+    <h2>Chat</h2>
+      {% for message in messages %}
+          <h5>{{ message.sender.username }}: {{ message.message }}</h5>
+      {% empty %}
+          <h5>No messages available</h5>
+      {% endfor %}
+
+    <!-- Message submission form -->
+    <form action="" method="post" novalidate>
+      {% csrf_token %}
+      <div class="form-group">
+        {{ message_form.message }}
+      </div>
+      <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+{% endblock %}
