@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from tasks.models import Project
+from tasks.models import Project, ChatMessage
 
 
 class LoginForm(AuthenticationForm):
@@ -51,13 +51,24 @@ class JoinProjectForm(forms.Form):
                                       widget=forms.TextInput(attrs={
                                           "class": "form-control",
                                           "placeholder": ""
-                                      }),
-                                      max_length=32)
+                                      }))
 
     def clean(self):
         super(JoinProjectForm, self).clean()
 
         invitation_code = self.cleaned_data.get("invitation_code")
 
-        if len(invitation_code) != 32:
+        if len(invitation_code) != 36:
             self.add_error("invitation_code", "Ensure your invitation code is 32 characters long")
+
+
+class ChatMessageForm(forms.ModelForm):
+    class Meta:
+        model = ChatMessage
+        fields = ["message", ]
+
+    message = forms.CharField(label=_("Message"),
+                              widget=forms.TextInput(attrs={
+                               "class": "form-control",
+                               "placeholder": "Send message"
+                              }))
