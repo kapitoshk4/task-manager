@@ -11,7 +11,49 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from tasks.models import Project, ChatMessage
+from tasks.models import Project, ChatMessage, Worker
+
+
+class RegistrationForm(UserCreationForm):
+    password1 = forms.CharField(label="Password",
+                                widget=forms.PasswordInput
+                                (attrs={
+                                    "class": "form-control",
+                                    "placeholder": "Password"
+                                }))
+    password2 = forms.CharField(label="Password",
+                                widget=forms.PasswordInput
+                                (attrs={
+                                    "class": "form-control",
+                                    "placeholder": "Confirm password"
+                                }))
+
+    class Meta:
+        model = Worker
+        fields = ("username", "email", "first_name", "last_name", "position",)
+
+        widgets = {
+            "username": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Username"
+            }),
+            "email": forms.EmailInput(attrs={
+                "class": "form-control",
+                "placeholder": "Email"
+            }),
+            "first_name": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "First name"
+            }),
+            "last_name": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Last name"
+            }),
+            "position": forms.Select(attrs={
+                "class": "form-control",
+                "placeholder": "Position"
+            })
+        }
 
 
 class LoginForm(AuthenticationForm):
