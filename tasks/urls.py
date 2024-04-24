@@ -5,6 +5,7 @@ from tasks.views import (
     TaskListView,
     UserLoginView,
     logout_view,
+    UserRegistrationView,
     ProjectListView,
     project_detail,
     ProjectCreateView,
@@ -19,6 +20,7 @@ urlpatterns = [
     path("", index, name="index"),
     path("login/", UserLoginView.as_view(), name="login"),
     path("logout/", logout_view, name="logout"),
+    path("register/", UserRegistrationView.as_view(), name="register"),
     path("tasks/",
          TaskListView.as_view(),
          name="task-list"
