@@ -11,7 +11,13 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseForbidden
 
-from tasks.forms import LoginForm, ProjectForm, JoinProjectForm, ChatMessageForm
+from tasks.forms import (
+    RegistrationForm,
+    LoginForm,
+    ProjectForm,
+    JoinProjectForm,
+    ChatMessageForm
+)
 from tasks.models import Task, Project, ChatMessage
 
 
@@ -38,6 +44,12 @@ class UserLoginView(LoginView):
 def logout_view(request):
     logout(request)
     return redirect("/login/")
+
+
+class UserRegistrationView(generic.CreateView):
+    template_name = "accounts/signup.html"
+    form_class = RegistrationForm
+    success_url = "/login/"
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
