@@ -29,12 +29,12 @@
         {% if show_tabs %}
           <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
             <a href="{% url 'tasks:project-list' %}" class="nav-link ">
-              <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Tasks</span>
+              <span class="pcoded-micon"><i class="feather icon-briefcase"></i></span><span class="pcoded-mtext">Tasks</span>
             </a>
           </li>
           <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
             <a href="{% url 'tasks:project-chat' pk=project.id %}" class="nav-link ">
-              <span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Chat</span>
+              <span class="pcoded-micon"><i class="feather icon-message-square"></i></span><span class="pcoded-mtext">Chat</span>
             </a>
           </li>
         {% endif %}
@@ -89,8 +89,12 @@
           <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
                 class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
           <ul class="pcoded-submenu">
-            <li class=""><a href="#" class="" target="_blank">Sign up</a></li>
+            {% if request.user.is_authenticated %}
+            <li class=""><a href="{% url 'tasks:logout' %}?next=/" class="" target="_blank">Log out</a></li>
+            {% else %}
+            <li class=""><a href="{% url 'tasks:register' %}" class="" target="_blank">Sign up</a></li>
             <li class=""><a href="{% url 'tasks:login' %}" class="" target="_blank">Sign in</a></li>
+            {% endif %}
           </ul>
         </li>
         <li data-username="Profile Page" class="nav-item {% if 'profile' in segment %}active{% endif %}"><a href="#" class="nav-link"><span
