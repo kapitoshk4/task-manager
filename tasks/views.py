@@ -169,6 +169,8 @@ class ChatMessagesView(LoginRequiredMixin, generic.DetailView):
         if self.request.user.is_authenticated:
             data["message_form"] = ChatMessageForm()
 
+        data["show_tabs"] = True
+
         return data
 
     def post(self, request, *args, **kwargs):
