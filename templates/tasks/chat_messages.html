@@ -3,16 +3,24 @@
 
 {% block content %}
     <h2>Chat</h2>
-      {% for message in messages %}
-          <h5>{{ message.sender.username }}: {{ message.message }}</h5>
-      {% empty %}
-          <h5>No messages available</h5>
-      {% endfor %}
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="datta-example-modal-content">
+                {% for message in messages %}
+                  <p>{{ message.sender.username }}: {{ message.message }}</p>
+                {% empty %}
+                  <h5>No messages available</h5>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
 
     <!-- Message submission form -->
-    <form action="" method="post" novalidate>
+    <form action="" method="post" novalidate class="chat__form">
       {% csrf_token %}
-      <div class="form-group">
+      <div class="form-group chat__input">
         {{ message_form.message }}
       </div>
       <button type="submit" class="btn btn-primary">Send</button>
