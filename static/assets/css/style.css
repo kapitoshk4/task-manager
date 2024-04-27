@@ -583,10 +583,42 @@ p.text-muted {
 .datta-example-modal-content {
   max-width: 100vw;
   margin: auto;
-  padding: 50px;
-  height: 100vh;
+  padding: 25px;
+  height: 500px;
   overflow: auto;
+  border-radius: 10px;
+  box-shadow: 0px 0px 3px #038fcf;
 }
+
+/* width */
+.datta-example-modal-content::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+.datta-example-modal-content::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+.datta-example-modal-content::-webkit-scrollbar-thumb {
+  background: #038fcf;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.datta-example-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #038fcf;
+}
+
+.datta-example-modal-content > p {
+  color: black;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-size: 16px;
+}
+
 .datta-example-modal-content > pre {
   overflow: hidden;
   width: -webkit-fit-content;
@@ -9599,6 +9631,19 @@ div.code-toolbar > .toolbar span:hover {
     margin-left: 30px;
   }
 }
+
+  .chat__form {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .chat__input {
+    width: 400px;
+    display: block;
+  }
+
 @media (max-width: 767px) {
   .sw-vertical-right .step-anchor {
     margin: 30px 0 0;
