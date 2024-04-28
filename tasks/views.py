@@ -21,19 +21,19 @@ from tasks.forms import (
 from tasks.models import Task, Project, ChatMessage
 
 
-@login_required
 def index(request):
-    num_projects = (
-            Project.objects.filter(creator=request.user).count() +
-            Project.objects.filter(assignees=request.user).distinct().count()
-    )
-    num_tasks = Task.objects.count()
-    context = {
-        "num_projects": num_projects,
-        "num_tasks": num_tasks
-    }
-
-    return render(request, "tasks/index.html", context)
+    if request.user.is_authenticated:
+        num_projects = (
+                Project.objects.filter(creator=request.user).count() +
+                Project.objects.filter(assignees=request.user).distinct().count()
+        )
+        num_tasks = Task.objects.count()
+        context = {
+            "num_projects": num_projects,
+            "num_tasks": num_tasks
+        }
+        return render(request, "tasks/index.html", context)
+    return render(request, "tasks/index.html")
 
 
 class UserLoginView(LoginView):
@@ -43,7 +43,7 @@ class UserLoginView(LoginView):
 
 def logout_view(request):
     logout(request)
-    return redirect("/login/")
+    return redirect("/")
 
 
 class UserRegistrationView(generic.CreateView):
