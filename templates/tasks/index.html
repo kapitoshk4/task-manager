@@ -38,6 +38,8 @@
     </div>
     <!--[ Monthly  sales section ] end-->
   </div>
+  {% else %}
+    <h2><a href="{% url 'tasks:login' %}">Log in</a> to view your count of projects and tasks.</h2>
   {% endif %}
 {% endblock %}
 <!-- [ Main Content ] end -->
