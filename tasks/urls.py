@@ -18,9 +18,9 @@ from tasks.views import (
 
 urlpatterns = [
     path("", index, name="index"),
-    path("login/", UserLoginView.as_view(), name="login"),
-    path("logout/", logout_view, name="logout"),
-    path("register/", UserRegistrationView.as_view(), name="register"),
+    path("accounts/login/", UserLoginView.as_view(), name="login"),
+    path("accounts/logout/", logout_view, name="logout"),
+    path("accounts/register/", UserRegistrationView.as_view(), name="register"),
     path("tasks/",
          TaskListView.as_view(),
          name="task-list"
