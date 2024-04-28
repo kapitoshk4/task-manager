@@ -612,13 +612,19 @@ p.text-muted {
   background: #038fcf;
 }
 
-.datta-example-modal-content > p {
+.datta-example-modal-content > .messages {
   color: black;
   padding-top: 3px;
   padding-bottom: 3px;
   font-size: 16px;
+  vertical-align: middle;
 }
 
+.datta-example-modal-content > .messages > p {
+  background-color: #038fcf;
+  display: inline-block;
+  border-radius: 5px;
+}
 .datta-example-modal-content > pre {
   overflow: hidden;
   width: -webkit-fit-content;
