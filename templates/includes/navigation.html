@@ -17,19 +17,20 @@
     <ul class="navbar-nav mr-auto">
       <li><a href="javascript:" class="full-screen" onclick="javascript:toggleFullScreen()"><i
             class="feather icon-maximize"></i></a></li>
-      <li class="nav-item">
-        <div class="main-search">
-          <div class="input-group">
-            <input type="text" id="m-search" class="form-control" placeholder="Search . . .">
-            <a href="javascript:" class="input-group-append search-close">
-              <i class="feather icon-x input-group-text"></i>
-            </a>
-            <span class="input-group-append search-btn btn btn-primary">
-              <i class="feather icon-search input-group-text"></i>
-            </span>
+      {% if show_search %}
+        <li class="nav-item">
+          <div class="main-search">
+            <div class="input-group">
+              <form action="" method="get" class="search-form">
+                {{ search_form }}
+                <button type="submit" class="button-search">
+                  <i class="feather icon-search input-group-text"></i>
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
+      {% endif %}
     </ul>
     <ul class="navbar-nav ml-auto">
       <li>
