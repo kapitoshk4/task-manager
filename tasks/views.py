@@ -16,7 +16,8 @@ from tasks.forms import (
     LoginForm,
     ProjectForm,
     JoinProjectForm,
-    ChatMessageForm
+    ChatMessageForm,
+    ProjectSearchForm
 )
 from tasks.models import Task, Project, ChatMessage
 
@@ -60,15 +61,31 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
 
 class ProjectListView(LoginRequiredMixin, generic.ListView):
     model = Project
+    queryset = Project.objects.all()
     context_object_name = "project_list"
     template_name = "tasks/project_list.html"
     paginate_by = 3
 
     def get_queryset(self):
-        return (
-                Project.objects.filter(creator=self.request.user) |
-                Project.objects.filter(assignees=self.request.user)
+        user = self.request.user
+        queryset = self.queryset.filter(creator=user) | self.queryset.filter(assignees=user)
+
+        form = ProjectSearchForm(self.request.GET)  # Bind form to GET data
+        if form.is_valid():
+            title = form.cleaned_data.get("title")
+            queryset = queryset.filter(title__icontains=title)
+
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProjectListView, self).get_context_data(**kwargs)
+        title = self.request.GET.get("title", "")
+        context["search_form"] = ProjectSearchForm(
+            initial={"title": title}
         )
+        context["show_search"] = True
+
+        return context
 
 
 @login_required
