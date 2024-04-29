@@ -114,3 +114,10 @@ class ChatMessageForm(forms.ModelForm):
                                "class": "form-control",
                                "placeholder": "Send message"
                               }))
+
+
+class ProjectSearchForm(forms.Form):
+    title = forms.CharField(max_length=100, required=False, label="", widget=forms.TextInput(attrs={
+        "class": "form-control",
+        "placeholder": "Search . . .",
+    }))
