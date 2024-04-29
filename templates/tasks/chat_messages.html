@@ -8,8 +8,8 @@
             <div class="col">
               <div class="datta-example-modal-content">
                 {% for message in messages %}
-                  <div class="messages">
-                    <div>{{ message.sender.username }}</div>
+                  <div class="messages {% if message.sender == request.user %}sent-by-me{% else %}sent-by-others{% endif %}">
+                    <div>{% if message.sender == request.user %}Me{% else %}{{ message.sender.username }}{% endif %} ({{ message.sender.position }})</div>
                     <p>{{ message.message }}</p>
                   </div>
                 {% empty %}
@@ -28,30 +28,4 @@
       </div>
       <button type="submit" class="btn btn-primary">Send</button>
     </form>
-    <script>
-        // Function to scroll chat container to the bottom
-        function scrollToBottom() {
-            var chatContainer = document.getElementById('chat-container');
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        // Submit message asynchronously
-        document.getElementById('message-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            var form = this;
-            var formData = new FormData(form);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', form.action);
-            xhr.setRequestHeader('X-CSRFToken', formData.get('csrfmiddlewaretoken'));
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    // Clear input field after successful submission
-                    document.getElementById('message-input').value = '';
-                    // Scroll to bottom to show the latest message
-                    scrollToBottom();
-                }
-            };
-            xhr.send(formData);
-        });
-    </script>
 {% endblock %}
