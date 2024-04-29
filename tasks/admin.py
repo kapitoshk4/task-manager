@@ -38,8 +38,8 @@ class WorkerAdmin(UserAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ["name", "description", "creator", ]
-    search_fields = ["name", ]
+    list_display = ["title", "description", "creator", ]
+    search_fields = ["title", ]
 
 
 admin.site.register(Position)
