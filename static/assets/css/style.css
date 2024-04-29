@@ -620,10 +620,18 @@ p.text-muted {
   vertical-align: middle;
 }
 
-.datta-example-modal-content > .messages > p {
+.datta-example-modal-content > .sent-by-me > p {
+  background-color: #CAE7F5;
+}
+
+.datta-example-modal-content > .sent-by-others > p {
   background-color: #038fcf;
+}
+
+.datta-example-modal-content > .messages > p {
   display: inline-block;
   border-radius: 5px;
+  padding: 10px
 }
 .datta-example-modal-content > pre {
   overflow: hidden;
@@ -1805,9 +1813,6 @@ p.text-muted {
           box-shadow: none;
 }
 .pcoded-header .main-search .input-group .form-control {
-  -webkit-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-  width: 0;
   font-size: 14px;
 }
 .pcoded-header .main-search .input-group .form-control:active, .pcoded-header .main-search .input-group .form-control:focus, .pcoded-header .main-search .input-group .form-control:hover,
@@ -10487,6 +10492,15 @@ div.code-toolbar > .toolbar span:hover {
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-bottom: 6px solid #f44236;
+}
+
+.search-form {
+  display: flex;
+}
+
+.button-search {
+  border: none;
+  background: none;
 }
 
 @-webkit-keyframes passing-through {
