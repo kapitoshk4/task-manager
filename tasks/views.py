@@ -17,7 +17,7 @@ from tasks.forms import (
     ProjectForm,
     JoinProjectForm,
     ChatMessageForm,
-    ProjectSearchForm
+    ProjectSearchForm, TaskForm
 )
 from tasks.models import Task, Project, ChatMessage
 
@@ -67,6 +67,20 @@ def task_list_view(request, pk):
         return render(request, "tasks/task_list.html", context)
     else:
         return HttpResponseForbidden("You do not have permission to view this project.")
+
+
+class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Task
+    template_name = "tasks/task_form.html"
+    form_class = TaskForm
+
+    def get_success_url(self):
+        return reverse_lazy("tasks:task-list", kwargs={"pk": self.kwargs['pk']})
+
+    def form_valid(self, form):
+        form.instance.creator_id = self.request.user.id
+        form.instance.project_id = self.kwargs['pk']
+        return super().form_valid(form)
 
 
 class ProjectListView(LoginRequiredMixin, generic.ListView):
