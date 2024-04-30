@@ -28,7 +28,7 @@
         </li>
         {% if show_tabs %}
           <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
-            <a href="{% url 'tasks:project-list' %}" class="nav-link ">
+            <a href="{% url 'tasks:task-list' pk=project.id %}" class="nav-link ">
               <span class="pcoded-micon"><i class="feather icon-briefcase"></i></span><span class="pcoded-mtext">Tasks</span>
             </a>
           </li>
