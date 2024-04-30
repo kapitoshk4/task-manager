@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from tasks.models import Project, ChatMessage, Worker
+from tasks.models import Project, ChatMessage, Worker, Task
 
 
 class RegistrationForm(UserCreationForm):
@@ -121,3 +121,36 @@ class ProjectSearchForm(forms.Form):
         "class": "form-control",
         "placeholder": "Search . . .",
     }))
+
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ["name", "description", "deadline", "priority", "status", "task_type"]
+
+        widgets = {
+            "name": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Name"
+            }),
+            "description": forms.Textarea(attrs={
+                "class": "form-control",
+                "placeholder": "Description"
+            }),
+            "deadline": forms.DateInput(attrs={
+                "class": "form-control",
+                "placeholder": "Date of deadline"
+            }),
+            "priority": forms.Select(attrs={
+                "class": "form-control",
+                "placeholder": "Priority"
+            }),
+            "status": forms.Select(attrs={
+                "class": "form-control",
+                "placeholder": "Status"
+            }),
+            "task_type": forms.Select(attrs={
+                "class": "form-control",
+                "placeholder": "Task type"
+            })
+        }
