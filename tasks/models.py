@@ -21,6 +21,13 @@ class TaskType(models.Model):
         return self.name
 
 
+class Worker(AbstractUser):
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.username} ({self.first_name} {self.last_name})"
+
+
 class Task(models.Model):
     HIGH = "H"
     MEDIUM = "M"
@@ -51,17 +58,10 @@ class Task(models.Model):
                                   related_name="tasks",
                                   on_delete=models.SET_NULL,
                                   null=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.name} {self.deadline}"
-
-
-class Worker(AbstractUser):
-    position = models.ForeignKey(Position, on_delete=models.CASCADE, null=True, blank=True)
-    tasks = models.ManyToManyField(Task, related_name="workers")
-
-    def __str__(self):
-        return f"{self.username} ({self.first_name} {self.last_name})"
 
 
 class Project(models.Model):
