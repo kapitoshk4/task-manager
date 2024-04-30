@@ -9315,6 +9315,22 @@ div.code-toolbar > .toolbar span:hover {
   background-color: #3ebfea;
 }
 
+.tasks__list {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+}
+
+.tasks__list-type {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0;
+}
+
 /**====== Toolbar css end ======**/
 /**  =====================
       Switches css start
