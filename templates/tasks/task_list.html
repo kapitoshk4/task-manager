@@ -3,7 +3,7 @@
 {% block content %}
       <div class="page-header-title">
         <h2 class="m-b-20">Your Tasks
-            <a href="#" class="btn btn-primary float-right">Add</a>
+            <a href="{% url 'tasks:task-add' pk=project.id %}" class="btn btn-primary float-right">Add</a>
         </h2>
       </div>
       <ul class="tasks__list">
