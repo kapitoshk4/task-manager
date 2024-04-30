@@ -28,6 +28,20 @@ class Worker(AbstractUser):
         return f"{self.username} ({self.first_name} {self.last_name})"
 
 
+class Project(models.Model):
+    title = models.CharField(max_length=63)
+    description = models.TextField()
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
+    invitation_code = models.UUIDField(editable=False, unique=True, null=True, blank=True)
+
+    class Meta:
+        ordering = ("title", )
+
+    def get_absolute_url(self):
+        return reverse("tasks:project-detail", kwargs={"pk": self.pk})
+
+
 class Task(models.Model):
     HIGH = "H"
     MEDIUM = "M"
@@ -59,23 +73,10 @@ class Task(models.Model):
                                   on_delete=models.SET_NULL,
                                   null=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.name} {self.deadline}"
-
-
-class Project(models.Model):
-    title = models.CharField(max_length=63)
-    description = models.TextField()
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="projects")
-    invitation_code = models.UUIDField(editable=False, unique=True, null=True, blank=True)
-
-    class Meta:
-        ordering = ("title", )
-
-    def get_absolute_url(self):
-        return reverse("tasks:project-detail", kwargs={"pk": self.pk})
 
 
 class ChatMessage(models.Model):
