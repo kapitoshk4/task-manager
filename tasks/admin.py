@@ -12,7 +12,7 @@ from tasks.models import (
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ["name", "description", "deadline", "status", "creator", ]
+    list_display = ["name", "description", "deadline", "status", "creator", "project", ]
     list_filter = ["deadline", "status"]
     search_fields = ["name", ]
 
