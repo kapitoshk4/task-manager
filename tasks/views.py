@@ -28,7 +28,7 @@ def index(request):
                 Project.objects.filter(creator=request.user).count() +
                 Project.objects.filter(assignees=request.user).distinct().count()
         )
-        num_tasks = Task.objects.count()
+        num_tasks = Task.objects.filter(creator=request.user).count()
         context = {
             "num_projects": num_projects,
             "num_tasks": num_tasks
