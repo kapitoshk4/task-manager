@@ -9321,6 +9321,8 @@ div.code-toolbar > .toolbar span:hover {
   justify-content: space-between;
   width: 100%;
   padding: 0;
+  font-size: large;
+  font-weight: bold;
 }
 
 .tasks__list-type {
@@ -9329,6 +9331,22 @@ div.code-toolbar > .toolbar span:hover {
   flex-direction: column;
   gap: 20px;
   padding: 0;
+}
+
+.tasks__list-item {
+  width: 30%;
+  background-color: #1dc4e9;
+  border-radius: 0 17px 0 0;
+}
+
+.tasks__list-type-status {
+  background-color: #3f4d67;
+  border-radius: 0 15px 0 0;
+  padding-left: 10px;
+}
+
+.tasks__list-type-task {
+  text-align: center;
 }
 
 /**====== Toolbar css end ======**/
