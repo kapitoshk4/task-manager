@@ -13,7 +13,7 @@ from tasks.views import (
     ProjectDeleteView,
     generate_code_view,
     join_project_view,
-    ChatMessagesView,
+    chat_messages_view,
 )
 
 urlpatterns = [
@@ -50,7 +50,7 @@ urlpatterns = [
          join_project_view,
          name="project-join"),
     path("projects/<int:pk>/chat",
-         ChatMessagesView.as_view(),
+         chat_messages_view,
          name="project-chat")
 ]
 
