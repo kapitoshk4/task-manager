@@ -2,7 +2,7 @@ from django.urls import path
 
 from tasks.views import (
     index,
-    TaskListView,
+    task_list_view,
     UserLoginView,
     logout_view,
     UserRegistrationView,
@@ -30,7 +30,7 @@ urlpatterns = [
          name="project-detail"
          ),
     path("projects/<int:pk>/tasks/",
-         TaskListView.as_view(),
+         task_list_view,
          name="task-list"),
     path("projects/create/",
          ProjectCreateView.as_view(),
