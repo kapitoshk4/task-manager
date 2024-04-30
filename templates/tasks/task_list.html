@@ -1,13 +1,43 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-  {% if task_list %}
-    <ul>
-      {% for task in task_list %}
+      <ul class="tasks__list">
+      
         <li>
-          {{ task.name }} ({{ task.deadline }})
+          <ul class="tasks__list-type">
+            <li>To do</li>
+            {% if task_list %}
+              {% for task in task_list %}
+                {% if task.status == "TD" %}
+                  <li><a href="#">{{ task.name }} ({{ task.deadline }})</a></li>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </ul>
         </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+        <li>
+          <ul class="tasks__list-type">
+            <li>Doing</li>
+            {% if task_list %}
+              {% for task in task_list %}
+                {% if task.status == "DG" %}
+                  <li><a href="#">{{ task.name }} ({{ task.deadline }})</a></li>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </li>
+        <li>
+          <ul class="tasks__list-type">
+            <li>Done</li>
+            {% if task_list %}
+              {% for task in task_list %}
+                {% if task.status == "DE" %}
+                  <li><a href="#">{{ task.name }} ({{ task.deadline }})</a></li>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </li>
+      </ul>
 {% endblock %}
