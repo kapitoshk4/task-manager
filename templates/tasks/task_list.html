@@ -1,39 +1,55 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
+      <div class="page-header-title">
+        <h2 class="m-b-20">Your Tasks
+            <a href="#" class="btn btn-primary float-right">Add</a>
+        </h2>
+      </div>
       <ul class="tasks__list">
-      
-        <li>
+        <li class="tasks__list-item">
           <ul class="tasks__list-type">
-            <li>To do</li>
+            <li class="tasks__list-type-status">To do</li>
             {% if task_list %}
               {% for task in task_list %}
                 {% if task.status == "TD" %}
-                  <li><a href="#">{{ task.name }} ({{ task.deadline }})</a></li>
+                  <li class="tasks__list-type-task">
+                    <a href="#">{{ task.name }}</a>
+                    <p>({{ task.deadline }})</p>
+                  </li>
+                  <hr style="border:2px solid white; width: 80%">
                 {% endif %}
               {% endfor %}
             {% endif %}
           </ul>
         </li>
-        <li>
+        <li class="tasks__list-item">
           <ul class="tasks__list-type">
-            <li>Doing</li>
+            <li class="tasks__list-type-status">Doing</li>
             {% if task_list %}
               {% for task in task_list %}
                 {% if task.status == "DG" %}
-                  <li><a href="#">{{ task.name }} ({{ task.deadline }})</a></li>
+                  <li class="tasks__list-type-task">
+                    <a href="#">{{ task.name }}</a>
+                    <p>({{ task.deadline }})</p>
+                  </li>       
+                  <hr style="border:2px solid white; width: 80%">
                 {% endif %}
               {% endfor %}
             {% endif %}
           </ul>
         </li>
-        <li>
+        <li class="tasks__list-item">
           <ul class="tasks__list-type">
-            <li>Done</li>
+            <li class="tasks__list-type-status">Done</li>
             {% if task_list %}
               {% for task in task_list %}
                 {% if task.status == "DE" %}
-                  <li><a href="#">{{ task.name }} ({{ task.deadline }})</a></li>
+                  <li class="tasks__list-type-task">
+                    <a href="#">{{ task.name }}</a>
+                    <p>({{ task.deadline }})</p>
+                  </li>
+                  <hr style="border:2px solid white; width: 80%">
                 {% endif %}
               {% endfor %}
             {% endif %}
