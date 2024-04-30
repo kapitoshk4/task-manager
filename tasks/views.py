@@ -58,6 +58,16 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "task_list"
     template_name = "tasks/task_list.html"
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TaskListView, self).get_context_data(**kwargs)
+        context["project"] = Project.objects.get(pk=self.kwargs["pk"])
+        context["show_tabs"] = True
+
+        return context
+    
+    def get_queryset(self):
+        return Task.objects.filter(project_id=self.kwargs["pk"])
+
 
 class ProjectListView(LoginRequiredMixin, generic.ListView):
     model = Project
