@@ -21,10 +21,6 @@ urlpatterns = [
     path("accounts/login/", UserLoginView.as_view(), name="login"),
     path("accounts/logout/", logout_view, name="logout"),
     path("accounts/register/", UserRegistrationView.as_view(), name="register"),
-    path("tasks/",
-         TaskListView.as_view(),
-         name="task-list"
-         ),
     path("projects/",
          ProjectListView.as_view(),
          name="project-list"
@@ -33,6 +29,9 @@ urlpatterns = [
          project_detail,
          name="project-detail"
          ),
+    path("projects/<int:pk>/tasks/",
+         TaskListView.as_view(),
+         name="task-list"),
     path("projects/create/",
          ProjectCreateView.as_view(),
          name="project-create"
