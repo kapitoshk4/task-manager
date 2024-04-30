@@ -53,20 +53,20 @@ class UserRegistrationView(generic.CreateView):
     success_url = "/login/"
 
 
-class TaskListView(LoginRequiredMixin, generic.ListView):
-    model = Task
-    context_object_name = "task_list"
-    template_name = "tasks/task_list.html"
+@login_required
+def task_list_view(request, pk):
+    project = get_object_or_404(Project, id=pk)
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(TaskListView, self).get_context_data(**kwargs)
-        context["project"] = Project.objects.get(pk=self.kwargs["pk"])
-        context["show_tabs"] = True
-
-        return context
-    
-    def get_queryset(self):
-        return Task.objects.filter(project_id=self.kwargs["pk"])
+    if request.user == project.creator or request.user in project.assignees.all():
+        tasks = Task.objects.filter(project=project)
+        context = {
+            "project": project,
+            "task_list": tasks,
+            "show_tabs": True
+        }
+        return render(request, "tasks/task_list.html", context)
+    else:
+        return HttpResponseForbidden("You do not have permission to view this project.")
 
 
 class ProjectListView(LoginRequiredMixin, generic.ListView):
