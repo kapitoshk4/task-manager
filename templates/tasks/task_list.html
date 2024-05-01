@@ -14,7 +14,7 @@
               {% for task in task_list %}
                 {% if task.status == "TD" %}
                   <li class="tasks__list-type-task">
-                    <a href="#">{{ task.name }}</a>
+                    <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
                     <p>({{ task.deadline }})</p>
                   </li>
                   <hr style="border:2px solid white; width: 80%">
