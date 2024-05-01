@@ -1,0 +1,62 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+  <!-- [ Main Content ] start -->
+    <div class="page-header-title">
+      <h2 class="m-b-20">{% if user == task.creator %}Your{% endif %} Task
+        {% if user == project.creator %}
+          <a href="{% url 'tasks:project-invitation' pk=project.id %}" class="btn btn-primary float-right">Edit</a>
+        {% endif %}
+      </h2>
+    </div>
+      <div class="row">
+        <!-- [ basic-table ] start -->
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header">
+              <h5>
+                {{ task.name }}
+              </h5>
+            </div>
+            <div class="card-block table-border-style">
+              <p>Description:</p>
+              <span>{{ task.description }}</span>
+            </div>
+            <div class="card-block table-border-style">
+              <p>Deadline:</p>
+              <p>{{ task.deadline }}</p>
+            </div>
+            <div class="card-block table-border-style">
+              <p>Priority:</p>
+              <p>{{ task.priority }}</p>
+            </div>
+            <div class="card-block table-border-style">
+              <p>Status:</p>
+              <p>{{task.status}}</p>
+            </div>
+            <div class="card-block table-border-style">
+              <p>Task type:</p>
+              <p>{{ task.task_type }}</p>
+            </div>
+            {% if user != task.creator %}
+              <div class="card-block table-border-style">
+                <p>Creator</p>
+                <p>{{ task.creator }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% if user == task.creator %}
+      <span>
+        <a href="{% url 'tasks:project-delete' pk=project.id %}" class="btn btn-danger link-to-page">
+          Delete
+        </a>
+      </span>
+    {% endif %}
+    <!-- [ basic-table ] end -->
+  {% endif %}
+{% endblock %}
+<!-- [ Main Content ] end -->
