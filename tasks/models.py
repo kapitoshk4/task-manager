@@ -43,8 +43,8 @@ class Project(models.Model):
 
 
 class Task(models.Model):
-    HIGH = "H"
-    MEDIUM = "M"
+    HIGH = "High"
+    MEDIUM = "Medium"
     LOW = "L"
 
     PRIORITY_CHOICES = [
@@ -53,9 +53,9 @@ class Task(models.Model):
         (LOW, "Low"),
     ]
 
-    TODO = "TD"
-    DOING = "DG"
-    DONE = "DE"
+    TODO = "To do"
+    DOING = "Doing"
+    DONE = "Done"
 
     STATUS_CHOICES = [
         (TODO, "To do"),
