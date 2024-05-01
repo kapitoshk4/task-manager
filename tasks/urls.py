@@ -13,7 +13,9 @@ from tasks.views import (
     ProjectDeleteView,
     generate_code_view,
     join_project_view,
-    chat_messages_view, TaskCreateView,
+    chat_messages_view,
+    TaskCreateView,
+    task_detail_view,
 )
 
 urlpatterns = [
@@ -32,6 +34,9 @@ urlpatterns = [
     path("projects/<int:pk>/tasks/",
          task_list_view,
          name="task-list"),
+    path("projects/<int:pk>/tasks/<int:task_pk>/",
+         task_detail_view,
+         name="task-detail"),
     path("projects/<int:pk>/tasks/add",
          TaskCreateView.as_view(),
          name="task-add"),
