@@ -66,7 +66,23 @@ def task_list_view(request, pk):
         }
         return render(request, "tasks/task_list.html", context)
     else:
-        return HttpResponseForbidden("You do not have permission to view this project.")
+        return HttpResponseForbidden("You do not have permission to view this page.")
+
+
+@login_required
+def task_detail_view(request, pk, task_pk):
+    project = get_object_or_404(Project, pk=pk)
+    task = get_object_or_404(Task, id=task_pk)
+
+    if request.user == project.creator or request.user in project.assignees.all():
+        context = {
+            "task": task,
+            "project": project,
+            "show_tabs": True
+        }
+
+        return render(request, "tasks/task_detail.html", context)
+    return HttpResponseForbidden("You do not have permission to this page.")
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
