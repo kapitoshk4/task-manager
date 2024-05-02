@@ -72,9 +72,9 @@ class LoginForm(AuthenticationForm):
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ["name", "description"]
+        fields = ["title", "description"]
 
-    name = forms.CharField(label=_("Title"),
+    title = forms.CharField(label=_("Title"),
                            widget=forms.TextInput(attrs={
                                "class": "form-control",
                                "placeholder": ""
