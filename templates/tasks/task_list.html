@@ -12,7 +12,7 @@
             <li class="tasks__list-type-status">To do</li>
             {% if task_list %}
               {% for task in task_list %}
-                {% if task.status == "TD" %}
+                {% if task.status == "To do" %}
                   <li class="tasks__list-type-task">
                     <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
                     <p>({{ task.deadline }})</p>
@@ -28,9 +28,9 @@
             <li class="tasks__list-type-status">Doing</li>
             {% if task_list %}
               {% for task in task_list %}
-                {% if task.status == "DG" %}
+                {% if task.status == "Doing" %}
                   <li class="tasks__list-type-task">
-                    <a href="#">{{ task.name }}</a>
+                    <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
                     <p>({{ task.deadline }})</p>
                   </li>       
                   <hr style="border:2px solid white; width: 80%">
@@ -44,9 +44,9 @@
             <li class="tasks__list-type-status">Done</li>
             {% if task_list %}
               {% for task in task_list %}
-                {% if task.status == "DE" %}
+                {% if task.status == "Done" %}
                   <li class="tasks__list-type-task">
-                    <a href="#">{{ task.name }}</a>
+                    <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
                     <p>({{ task.deadline }})</p>
                   </li>
                   <hr style="border:2px solid white; width: 80%">
