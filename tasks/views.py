@@ -9,7 +9,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseNotFound
 
 from tasks.forms import (
     RegistrationForm,
@@ -89,14 +89,39 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     template_name = "tasks/task_form.html"
     form_class = TaskForm
-
-    def get_success_url(self):
-        return reverse_lazy("tasks:task-list", kwargs={"pk": self.kwargs['pk']})
+    success_url = reverse_lazy("tasks:task-list")
 
     def form_valid(self, form):
         form.instance.creator_id = self.request.user.id
         form.instance.project_id = self.kwargs['pk']
         return super().form_valid(form)
+
+
+def task_update_view(request, pk, task_pk):
+    project = get_object_or_404(Project, pk=pk)
+    task = get_object_or_404(Task, id=task_pk)
+
+    if request.user != project.creator and request.user not in project.assignees.all():
+        return HttpResponseForbidden("You do not have permission to this page.")
+
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.instance.creator_id = request.user.id
+            form.instance.project_id = pk
+            form.save()
+            return redirect('tasks:task-list', pk=pk)
+    else:
+        form = TaskForm(instance=task)
+
+    context = {
+        'form': form,
+        'project': project,
+        'task': task,
+        'show_tabs': True
+    }
+
+    return render(request, 'tasks/task_form.html', context)
 
 
 class ProjectListView(LoginRequiredMixin, generic.ListView):
