@@ -7,7 +7,7 @@
     <div class="page-header-title">
       <h2 class="m-b-20">{% if user == task.creator %}Your{% endif %} Task
         {% if user == project.creator %}
-          <a href="{% url 'tasks:project-invitation' pk=project.id %}" class="btn btn-primary float-right">Edit</a>
+          <a href="{% url 'tasks:task-update' pk=project.id task_pk=task.id %}" class="btn btn-primary float-right">Edit</a>
         {% endif %}
       </h2>
     </div>
