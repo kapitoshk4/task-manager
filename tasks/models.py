@@ -78,6 +78,9 @@ class Task(models.Model):
     def __str__(self):
         return f"{self.name} {self.deadline}"
 
+    def get_absolute_url(self):
+        return reverse("tasks:task-detail", kwargs={"pk": self.pk})
+
 
 class ChatMessage(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="messages")
