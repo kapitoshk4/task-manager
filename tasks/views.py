@@ -144,7 +144,7 @@ def task_delete_view(request, pk, task_pk):
         'show_tabs': True
     }
 
-    return render(request, "tasks/task_complete_delete.html", context)
+    return render(request, "tasks/task_confirm_delete.html", context)
 
 
 class ProjectListView(LoginRequiredMixin, generic.ListView):
