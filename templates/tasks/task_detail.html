@@ -51,7 +51,7 @@
       </div>
     {% if user == task.creator %}
       <span>
-        <a href="{% url 'tasks:project-delete' pk=project.id %}" class="btn btn-danger link-to-page">
+        <a href="{% url 'tasks:task-delete' pk=project.id task_pk=task.id %}" class="btn btn-danger link-to-page">
           Delete
         </a>
       </span>
