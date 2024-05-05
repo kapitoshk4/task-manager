@@ -9,7 +9,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
-from django.http import HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponseForbidden, HttpResponseNotFound, Http404
 
 from tasks.forms import (
     RegistrationForm,
@@ -94,6 +94,8 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.creator_id = self.request.user.id
         form.instance.project_id = self.kwargs['pk']
+        # Include the project ID in the reverse URL
+        self.success_url = reverse_lazy("tasks:task-list", kwargs={'pk': self.kwargs['pk']})
         return super().form_valid(form)
 
 
@@ -122,6 +124,27 @@ def task_update_view(request, pk, task_pk):
     }
 
     return render(request, 'tasks/task_form.html', context)
+
+
+@login_required
+def task_delete_view(request, pk, task_pk):
+    project = get_object_or_404(Project, pk=pk)
+    task = get_object_or_404(Task, id=task_pk)
+
+    if request.user != project.creator and request.user not in project.assignees.all():
+        return HttpResponseForbidden("You do not have permission to this page.")
+
+    if request.method == 'POST':  # Changed method to POST
+        task.delete()
+        return redirect('tasks:task-list', pk=pk)  # Redirect after deletion
+
+    context = {
+        'project': project,
+        'task': task,
+        'show_tabs': True
+    }
+
+    return render(request, "tasks/task_complete_delete.html", context)
 
 
 class ProjectListView(LoginRequiredMixin, generic.ListView):
