@@ -6,7 +6,7 @@ from tasks.models import (
     Position,
     TaskType,
     Worker,
-    Project
+    Project, TaskComment
 )
 
 
@@ -40,6 +40,11 @@ class WorkerAdmin(UserAdmin):
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ["title", "description", "creator", ]
     search_fields = ["title", ]
+
+
+@admin.register(TaskComment)
+class TaskCommentAdmin(admin.ModelAdmin):
+    list_display = ["message", "sender", "task",]
 
 
 admin.site.register(Position)
