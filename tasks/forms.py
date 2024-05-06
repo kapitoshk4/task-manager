@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from tasks.models import Project, ChatMessage, Worker, Task
+from tasks.models import Project, ChatMessage, Worker, Task, TaskComment
 
 
 class RegistrationForm(UserCreationForm):
@@ -153,4 +153,19 @@ class TaskForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": "Task type"
             })
+        }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = TaskComment
+        fields = ["message", ]
+
+        labels = {"message": ""}
+
+        widgets = {
+            "message": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Add a comment..."
+            }),
         }
