@@ -1,0 +1,27 @@
+<div class="comments">
+    <p>{{ task.comments.count }} comment{{ task.comments.count|pluralize }}</p>
+    <form action="" method="post" class="search-form">
+      {% if user.is_authenticated %}
+        <div class="comment-input">
+        {% csrf_token %}
+          {{ form.as_p }}
+          <button class="btn btn-primary btn-xs" type="submit">Comment</button>
+        </div>
+      {% endif %}
+    </form>
+    {% if comments %}
+      <ul>
+        {% for comment in comments %}
+          <div class="row">
+            <div class="col-sm-2">
+              <strong>{{ comment.sender.username }}</strong>
+            </div>
+            {{ comment.date }}
+          </div>
+          <p>{{ comment.message }}</p>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <strong class="text-secondary">No comments yet...</strong>
+    {% endif %}
+  </div>
