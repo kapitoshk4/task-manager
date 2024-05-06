@@ -17,9 +17,9 @@ from tasks.forms import (
     ProjectForm,
     JoinProjectForm,
     ChatMessageForm,
-    ProjectSearchForm, TaskForm
+    ProjectSearchForm, TaskForm, CommentForm
 )
-from tasks.models import Task, Project, ChatMessage
+from tasks.models import Task, Project, ChatMessage, TaskComment
 
 
 def index(request):
@@ -73,16 +73,31 @@ def task_list_view(request, pk):
 def task_detail_view(request, pk, task_pk):
     project = get_object_or_404(Project, pk=pk)
     task = get_object_or_404(Task, id=task_pk)
+    comments = TaskComment.objects.filter(task=task)
 
-    if request.user in project.assignees.all():
-        context = {
-            "task": task,
-            "project": project,
-            "show_tabs": True
-        }
+    if request.user not in project.assignees.all():
+        return HttpResponseForbidden("You do not have permission to this page.")
 
-        return render(request, "tasks/task_detail.html", context)
-    return HttpResponseForbidden("You do not have permission to this page.")
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.sender = request.user
+            comment.task = task
+            comment.save()
+    else:
+        form = CommentForm()
+
+    context = {
+        "form": form,
+        "task": task,
+        "project": project,
+        "show_tabs": True,
+        "comments": comments
+    }
+
+    return render(request, "tasks/task_detail.html", context)
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
