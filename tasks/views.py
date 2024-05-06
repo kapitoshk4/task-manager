@@ -58,10 +58,10 @@ def task_list_view(request, pk):
     project = get_object_or_404(Project, id=pk)
 
     if request.user == project.creator or request.user in project.assignees.all():
-        tasks = Task.objects.filter(project=project)
+        user_tasks = Task.objects.filter(project=project, creator=request.user)
         context = {
             "project": project,
-            "task_list": tasks,
+            "task_list": user_tasks,
             "show_tabs": True
         }
         return render(request, "tasks/task_list.html", context)
@@ -74,7 +74,7 @@ def task_detail_view(request, pk, task_pk):
     project = get_object_or_404(Project, pk=pk)
     task = get_object_or_404(Task, id=task_pk)
 
-    if request.user == project.creator or request.user in project.assignees.all():
+    if request.user in project.assignees.all():
         context = {
             "task": task,
             "project": project,
@@ -103,7 +103,7 @@ def task_update_view(request, pk, task_pk):
     project = get_object_or_404(Project, pk=pk)
     task = get_object_or_404(Task, id=task_pk)
 
-    if request.user != project.creator and request.user not in project.assignees.all():
+    if request.user != task.creator:
         return HttpResponseForbidden("You do not have permission to this page.")
 
     if request.method == 'POST':
@@ -131,7 +131,7 @@ def task_delete_view(request, pk, task_pk):
     project = get_object_or_404(Project, pk=pk)
     task = get_object_or_404(Task, id=task_pk)
 
-    if request.user != project.creator and request.user not in project.assignees.all():
+    if request.user != task.creator:
         return HttpResponseForbidden("You do not have permission to this page.")
 
     if request.method == 'POST':  # Changed method to POST
@@ -197,7 +197,11 @@ class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("tasks:project-list")
 
     def form_valid(self, form):
-        form.instance.creator_id = self.request.user.id
+        project = form.save(commit=False)
+        project.creator = self.request.user
+        project.save()
+        project.assignees.add(self.request.user)
+
         return super().form_valid(form)
 
 
