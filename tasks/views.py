@@ -17,7 +17,7 @@ from tasks.forms import (
     ProjectForm,
     JoinProjectForm,
     ChatMessageForm,
-    ProjectSearchForm, TaskForm, CommentForm
+    ProjectSearchForm, TaskForm, CommentForm, ProjectTaskSearchForm
 )
 from tasks.models import Task, Project, ChatMessage, TaskComment
 
@@ -67,6 +67,37 @@ def task_list_view(request, pk):
         return render(request, "tasks/task_list.html", context)
     else:
         return HttpResponseForbidden("You do not have permission to view this page.")
+
+
+class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
+    model = Task
+    template_name = 'tasks/project_task_list.html'
+    context_object_name = 'project_tasks'
+    paginate_by = 10
+
+    def get_queryset(self):
+        project = get_object_or_404(Project, id=self.kwargs['pk'])
+        queryset = super().get_queryset().filter(project=project)
+        search_query = self.request.GET.get('title', None)
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project = get_object_or_404(Project, id=self.kwargs['pk'])
+        context['project'] = project
+        context['search_form'] = ProjectTaskSearchForm()
+        context['show_tabs'] = True
+        context['show_search'] = True
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        project = get_object_or_404(Project, id=self.kwargs['pk'])
+        if request.user == project.creator or request.user in project.assignees.all():
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseForbidden("You do not have permission to view this page.")
 
 
 @login_required
