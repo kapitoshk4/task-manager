@@ -5,7 +5,7 @@
   {% if request.user.is_authenticated %}
   <!-- [ Main Content ] start -->
     <div class="page-header-title">
-      <h2 class="m-b-20">{% if user == task.creator %}Your{% endif %} Task
+      <h2 class="m-b-20">{% if user == task.creator %}Your{% else %}{{ task.creator.username }}'s{% endif %} Task
         {% if user == project.creator %}
           <a href="{% url 'tasks:task-update' pk=project.id task_pk=task.id %}" class="btn btn-primary float-right">Edit</a>
         {% endif %}
@@ -40,12 +40,6 @@
               <p>Task type:</p>
               <p>{{ task.task_type }}</p>
             </div>
-            {% if user != task.creator %}
-              <div class="card-block table-border-style">
-                <p>Creator</p>
-                <p>{{ task.creator }}</p>
-              </div>
-            {% endif %}
           </div>
         </div>
       </div>
