@@ -27,15 +27,26 @@
           </a>
         </li>
         {% if show_tabs %}
-          <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
-            <a href="{% url 'tasks:task-list' pk=project.id %}" class="nav-link ">
-              <span class="pcoded-micon"><i class="feather icon-briefcase"></i></span><span class="pcoded-mtext">Tasks</span>
-            </a>
-          </li>
-          <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
-            <a href="{% url 'tasks:project-chat' pk=project.id %}" class="nav-link ">
-              <span class="pcoded-micon"><i class="feather icon-message-square"></i></span><span class="pcoded-mtext">Chat</span>
-            </a>
+          <li class="nav-item pcoded-hasmenu">
+            <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i 
+              class="feather icon-layers"></i></span><span class="pcoded-mtext">{{ project.title }}</span></a>
+            <ul class="pcoded-submenu">
+              <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
+                <a href="{% url 'tasks:project-task-list' pk=project.id %}" class="nav-link ">
+                  <span class="pcoded-micon"><i class="feather icon-server"></i></span><span class="pcoded-mtext">Project Tasks</span>
+                </a>
+              </li>
+              <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
+                <a href="{% url 'tasks:task-list' pk=project.id %}" class="nav-link ">
+                  <span class="pcoded-micon"><i class="feather icon-briefcase"></i></span><span class="pcoded-mtext">Your Tasks</span>
+                </a>
+              </li>
+              <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
+                <a href="{% url 'tasks:project-chat' pk=project.id %}" class="nav-link ">
+                  <span class="pcoded-micon"><i class="feather icon-message-square"></i></span><span class="pcoded-mtext">Chat</span>
+                </a>
+              </li>
+            </ul>
           </li>
         {% endif %}
 
