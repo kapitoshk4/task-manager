@@ -169,3 +169,10 @@ class CommentForm(forms.ModelForm):
                 "placeholder": "Add a comment..."
             }),
         }
+
+
+class ProjectTaskSearchForm(forms.Form):
+    title = forms.CharField(max_length=100, required=False, initial="", label="", widget=forms.TextInput(attrs={
+        "class": "form-control",
+        "placeholder": "Search . . .",
+    }))
