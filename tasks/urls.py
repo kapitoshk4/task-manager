@@ -18,7 +18,8 @@ from tasks.views import (
     task_detail_view,
     task_update_view,
     task_delete_view,
-    ProjectTaskListView
+    ProjectTaskListView,
+    ProfileDetailView
 )
 
 urlpatterns = [
@@ -71,7 +72,11 @@ urlpatterns = [
          name="project-join"),
     path("projects/<int:pk>/chat",
          chat_messages_view,
-         name="project-chat")
+         name="project-chat"),
+    path("profile/",
+         ProfileDetailView.as_view(),
+         name="profile-detail"
+         ),
 ]
 
 app_name = "tasks"
