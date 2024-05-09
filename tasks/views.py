@@ -10,6 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponseForbidden, HttpResponseNotFound, Http404
+from django.views.generic import DetailView
 
 from tasks.forms import (
     RegistrationForm,
@@ -19,7 +20,7 @@ from tasks.forms import (
     ChatMessageForm,
     ProjectSearchForm, TaskForm, CommentForm, ProjectTaskSearchForm
 )
-from tasks.models import Task, Project, ChatMessage, TaskComment
+from tasks.models import Task, Project, ChatMessage, TaskComment, Worker
 
 
 def index(request):
@@ -314,6 +315,15 @@ def chat_messages_view(request, pk):
     project = get_object_or_404(Project, id=pk)
 
     if request.user == project.creator or request.user in project.assignees.all():
+        if request.method == 'POST':
+            message_form = ChatMessageForm(request.POST)
+            if message_form.is_valid():
+                new_message = message_form.save(commit=False)
+                new_message.project = project
+                new_message.sender = request.user
+                new_message.save()
+                return redirect('tasks:project-chat', pk=pk)
+
         messages_connected = ChatMessage.objects.filter(project=project)
         context = {
             "project": project,
@@ -324,3 +334,12 @@ def chat_messages_view(request, pk):
         return render(request, "tasks/chat_messages.html", context)
     else:
         return HttpResponseForbidden("You do not have permission to view this project.")
+
+
+class ProfileDetailView(LoginRequiredMixin, generic.DetailView):
+    worker = Worker
+    success_url = reverse_lazy("tasks:profile-detail")
+    template_name = "tasks/profile_detail.html"
+
+    def get_object(self, queryset=None):
+        return self.request.user
