@@ -1,0 +1,66 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+    <div class="page-header-title">
+      <h2 class="m-b-20">
+        Your Profile
+      </h2>
+    </div>
+    <div class="row">
+      <div class="col-xl-4 col-md-6">
+        <div class="card card-event">
+          <div class="card-block">
+            <div class="row align-items-center justify-content-center">
+              <div class="col">
+                <h5 class="m-0">{{ user.get_username }}</h5>
+              </div>
+            </div>
+            <h2 class="mt-3 f-w-300">45<sub class="text-muted f-14">Competitors</sub></h2>
+            <h6 class="text-muted mt-4 mb-0">You can participate in event </h6>
+            <i class="fab fa-angellist text-c-purple f-50"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-8 col-md-6">
+        <div class="card Recent-Users">
+          <div class="card-header">
+              <h5>Information</h5>
+          </div>
+          <div class="card-block px-0 py-3">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <tbody>
+                  <tr class="unread">
+                    <td>
+                      <h6 class="mb-1">Full name</h6>
+                    </td>
+                    <td>
+                      <h6 class="text-muted">{{ user.first_name }} {{ user.last_name }}</h6>
+                    </td>
+                  </tr>
+                  <tr class="unread">
+                    <td>
+                      <h6 class="mb-1">Email</h6>
+                    </td>
+                    <td>
+                      <h6 class="text-muted">{{ user.email }}</h6>
+                    </td>
+                  </tr>
+                  <tr class="unread">
+                    <td>
+                        <h6 class="mb-1">Position</h6>
+                    </td>
+                    <td>
+                        <h6 class="text-muted">{{ user.position }}</h6>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
