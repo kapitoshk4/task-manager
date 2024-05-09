@@ -18,7 +18,7 @@ from tasks.forms import (
     ProjectForm,
     JoinProjectForm,
     ChatMessageForm,
-    ProjectSearchForm, TaskForm, CommentForm, ProjectTaskSearchForm
+    ProjectSearchForm, TaskForm, CommentForm, ProjectTaskSearchForm, ProfileForm
 )
 from tasks.models import Task, Project, ChatMessage, TaskComment, Worker
 
@@ -343,3 +343,20 @@ class ProfileDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    worker = Worker
+    success_url = reverse_lazy("tasks:profile-detail")
+    template_name = "tasks/profile_form.html"
+    form_class = ProfileForm
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def form_valid(self, form):
+        profile = form.save(commit=False)
+        profile.user = self.request.user
+        profile.save()
+
+        return super().form_valid(form)
