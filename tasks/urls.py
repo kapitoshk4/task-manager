@@ -19,7 +19,7 @@ from tasks.views import (
     task_update_view,
     task_delete_view,
     ProjectTaskListView,
-    ProfileDetailView
+    ProfileDetailView, ProfileUpdateView
 )
 
 urlpatterns = [
@@ -77,6 +77,9 @@ urlpatterns = [
          ProfileDetailView.as_view(),
          name="profile-detail"
          ),
+    path("profile/edit",
+         ProfileUpdateView.as_view(),
+         name="profile-edit")
 ]
 
 app_name = "tasks"
