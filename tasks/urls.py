@@ -6,6 +6,7 @@ from tasks.views import (
     UserLoginView,
     logout_view,
     UserRegistrationView,
+    UserPasswordChangeView,
     ProjectListView,
     project_detail,
     ProjectCreateView,
@@ -19,7 +20,8 @@ from tasks.views import (
     task_update_view,
     task_delete_view,
     ProjectTaskListView,
-    ProfileDetailView, ProfileUpdateView
+    ProfileDetailView,
+    ProfileUpdateView
 )
 
 urlpatterns = [
@@ -27,6 +29,7 @@ urlpatterns = [
     path("accounts/login/", UserLoginView.as_view(), name="login"),
     path("accounts/logout/", logout_view, name="logout"),
     path("accounts/register/", UserRegistrationView.as_view(), name="register"),
+    path("accounts/password-change/", UserPasswordChangeView.as_view(), name="password-change"),
     path("projects/",
          ProjectListView.as_view(),
          name="project-list"
