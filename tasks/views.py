@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -16,9 +16,14 @@ from tasks.forms import (
     RegistrationForm,
     LoginForm,
     ProjectForm,
+    UserPasswordChangeForm,
     JoinProjectForm,
     ChatMessageForm,
-    ProjectSearchForm, TaskForm, CommentForm, ProjectTaskSearchForm, ProfileForm
+    ProjectSearchForm,
+    TaskForm,
+    CommentForm,
+    ProjectTaskSearchForm,
+    ProfileForm
 )
 from tasks.models import Task, Project, ChatMessage, TaskComment, Worker
 
@@ -51,7 +56,13 @@ def logout_view(request):
 class UserRegistrationView(generic.CreateView):
     template_name = "accounts/signup.html"
     form_class = RegistrationForm
-    success_url = "/login/"
+    success_url = reverse_lazy("tasks:login")
+
+
+class UserPasswordChangeView(PasswordChangeView):
+    form_class = UserPasswordChangeForm
+    success_url = reverse_lazy("tasks:login")
+    template_name = "accounts/change_password.html"
 
 
 @login_required
