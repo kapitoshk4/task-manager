@@ -59,7 +59,7 @@
                   Profile</a></li>
               {% if request.user.is_authenticated %}
               <li>
-                <a href="#" class="dropdown-item">
+                <a href="{% url 'tasks:password-change' %}" class="dropdown-item">
                   <i class="feather icon-edit"></i>Change Password
                 </a>
               </li>
