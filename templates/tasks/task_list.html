@@ -13,7 +13,7 @@
             {% if task_list %}
               {% for task in task_list %}
                 {% if task.status == "To do" %}
-                  <li class="tasks__list-type-task">
+                  <li class="tasks__list-type-task {% if task.priority == 'Low' %} low-priority {% elif task.priority == 'Medium' %} medium-priority {% elif task.priority == 'High' %} high-priority {% endif %}">
                     <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
                     <p>({{ task.deadline }})</p>
                   </li>
@@ -29,7 +29,7 @@
             {% if task_list %}
               {% for task in task_list %}
                 {% if task.status == "Doing" %}
-                  <li class="tasks__list-type-task">
+                  <li class="tasks__list-type-task {% if task.priority == 'Low' %} low-priority {% elif task.priority == 'Medium' %} medium-priority {% elif task.priority == 'High' %} high-priority {% endif %}">
                     <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
                     <p>({{ task.deadline }})</p>
                   </li>       
@@ -45,7 +45,7 @@
             {% if task_list %}
               {% for task in task_list %}
                 {% if task.status == "Done" %}
-                  <li class="tasks__list-type-task">
+                  <li class="tasks__list-type-task done-task">
                     <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
                     <p>({{ task.deadline }})</p>
                   </li>
