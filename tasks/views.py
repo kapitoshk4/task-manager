@@ -106,7 +106,7 @@ class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
 
     def dispatch(self, request, *args, **kwargs):
         project = get_object_or_404(Project, id=self.kwargs['pk'])
-        if request.user == project.creator or request.user in project.assignees.all():
+        if request.user in project.assignees.all():
             return super().dispatch(request, *args, **kwargs)
         else:
             return HttpResponseForbidden("You do not have permission to view this page.")
@@ -157,6 +157,7 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
+@login_required
 def task_update_view(request, pk, task_pk):
     project = get_object_or_404(Project, pk=pk)
     task = get_object_or_404(Task, id=task_pk)
@@ -164,24 +165,24 @@ def task_update_view(request, pk, task_pk):
     if request.user != task.creator:
         return HttpResponseForbidden("You do not have permission to this page.")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.instance.creator_id = request.user.id
             form.instance.project_id = pk
             form.save()
-            return redirect('tasks:task-list', pk=pk)
+            return redirect("tasks:task-list", pk=pk)
     else:
         form = TaskForm(instance=task)
 
     context = {
-        'form': form,
-        'project': project,
-        'task': task,
-        'show_tabs': True
+        "form": form,
+        "project": project,
+        "task": task,
+        "show_tabs": True
     }
 
-    return render(request, 'tasks/task_form.html', context)
+    return render(request, "tasks/task_form.html", context)
 
 
 @login_required
@@ -192,14 +193,14 @@ def task_delete_view(request, pk, task_pk):
     if request.user != task.creator:
         return HttpResponseForbidden("You do not have permission to this page.")
 
-    if request.method == 'POST':  # Changed method to POST
+    if request.method == "POST":
         task.delete()
-        return redirect('tasks:task-list', pk=pk)  # Redirect after deletion
+        return redirect("tasks:task-list", pk=pk)
 
     context = {
-        'project': project,
-        'task': task,
-        'show_tabs': True
+        "project": project,
+        "task": task,
+        "show_tabs": True
     }
 
     return render(request, "tasks/task_confirm_delete.html", context)
@@ -216,7 +217,7 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
         user = self.request.user
         queryset = self.queryset.filter(creator=user) | self.queryset.filter(assignees=user)
 
-        form = ProjectSearchForm(self.request.GET)  # Bind form to GET data
+        form = ProjectSearchForm(self.request.GET)
         if form.is_valid():
             title = form.cleaned_data.get("title")
             queryset = queryset.filter(title__icontains=title)
