@@ -9330,7 +9330,7 @@ div.code-toolbar > .toolbar span:hover {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 0;
+  padding: 0 0 20px;
 }
 
 .tasks__list-item {
@@ -9345,8 +9345,28 @@ div.code-toolbar > .toolbar span:hover {
   padding-left: 10px;
 }
 
+hr:last-child {
+  display:none;
+}
+
 .tasks__list-type-task {
   text-align: center;
+}
+
+.done-task {
+  background-color: #1de9b6;
+}
+
+.low-priority {
+  background-color: #ccffcc;
+}
+
+.medium-priority {
+    background-color: #ffffcc;
+}
+
+.high-priority {
+    background-color: #ffcccc;
 }
 
 /**====== Toolbar css end ======**/
