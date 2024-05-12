@@ -44,7 +44,7 @@ def index(request):
 
 
 class UserLoginView(LoginView):
-    template_name = 'accounts/login.html'
+    template_name = "accounts/login.html"
     form_class = LoginForm
 
 
@@ -88,24 +88,24 @@ class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        project = get_object_or_404(Project, id=self.kwargs['pk'])
+        project = get_object_or_404(Project, id=self.kwargs["pk"])
         queryset = super().get_queryset().filter(project=project)
-        search_query = self.request.GET.get('title', None)
+        search_query = self.request.GET.get("title", None)
         if search_query:
             queryset = queryset.filter(name__icontains=search_query)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        project = get_object_or_404(Project, id=self.kwargs['pk'])
-        context['project'] = project
-        context['search_form'] = ProjectTaskSearchForm()
-        context['show_tabs'] = True
-        context['show_search'] = True
+        project = get_object_or_404(Project, id=self.kwargs["pk"])
+        context["project"] = project
+        context["search_form"] = ProjectTaskSearchForm()
+        context["show_tabs"] = True
+        context["show_search"] = True
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        project = get_object_or_404(Project, id=self.kwargs['pk'])
+        project = get_object_or_404(Project, id=self.kwargs["pk"])
         if request.user in project.assignees.all():
             return super().dispatch(request, *args, **kwargs)
         else:
@@ -151,9 +151,8 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 
     def form_valid(self, form):
         form.instance.creator_id = self.request.user.id
-        form.instance.project_id = self.kwargs['pk']
-        # Include the project ID in the reverse URL
-        self.success_url = reverse_lazy("tasks:task-list", kwargs={'pk': self.kwargs['pk']})
+        form.instance.project_id = self.kwargs["pk"]
+        self.success_url = reverse_lazy("tasks:task-list", kwargs={"pk": self.kwargs["pk"]})
         return super().form_valid(form)
 
 
@@ -327,14 +326,14 @@ def chat_messages_view(request, pk):
     project = get_object_or_404(Project, id=pk)
 
     if request.user == project.creator or request.user in project.assignees.all():
-        if request.method == 'POST':
+        if request.method == "POST":
             message_form = ChatMessageForm(request.POST)
             if message_form.is_valid():
                 new_message = message_form.save(commit=False)
                 new_message.project = project
                 new_message.sender = request.user
                 new_message.save()
-                return redirect('tasks:project-chat', pk=pk)
+                return redirect("tasks:project-chat", pk=pk)
 
         messages_connected = ChatMessage.objects.filter(project=project)
         context = {
