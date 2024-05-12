@@ -45,7 +45,7 @@ class Project(models.Model):
 class Task(models.Model):
     HIGH = "High"
     MEDIUM = "Medium"
-    LOW = "L"
+    LOW = "Low"
 
     PRIORITY_CHOICES = [
         (HIGH, "High"),
