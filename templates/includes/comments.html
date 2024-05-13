@@ -10,17 +10,21 @@
       {% endif %}
     </form>
     {% if comments %}
-      <ul>
+      <div>
         {% for comment in comments %}
-          <div class="row">
-            <div class="col-sm-2">
-              <strong>{{ comment.sender.username }}</strong>
+          <div class="user-comment">
+            <div class="row">
+              <div class="col-sm-2">
+                <h5>{% if comment.sender == request.user %}Me{% else %}{{ comment.sender.username }}{% endif %}</h5>
+              </div>
+              <div>{{ comment.date }}</div>
             </div>
-            {{ comment.date }}
+            <div class="comment-message">
+              <p>{{ comment.message }}</p>
+            </div>
           </div>
-          <p>{{ comment.message }}</p>
         {% endfor %}
-      </ul>
+      </div>
     {% else %}
       <strong class="text-secondary">No comments yet...</strong>
     {% endif %}
