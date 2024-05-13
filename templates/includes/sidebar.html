@@ -1,5 +1,3 @@
-{#{% load i18n static admin_datta %}#}
-
 <nav class="pcoded-navbar">
   <div class="navbar-wrapper">
     <div class="navbar-brand header-logo">
@@ -61,57 +59,16 @@
             <li class=""><a href="{% url 'tasks:register' %}" class="">Sign UP</a></li>
           </ul>
         </li>
-        {% endif %}
-
-{#        {% admin_get_menu as app_list %}#}
-        {% if app_list %}
-          {% for app in app_list %}
-            {% if app.has_perms and not app.pinned %}
-              <li 
-                data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds"
-                class="nav-item pcoded-hasmenu"
-              >
-                <a href="javascript:" class="nav-link ">
-                  <span class="pcoded-micon"><i class=" {% if app.icon %}{{ app.icon }} {% else %} feather icon-box {% endif %}"></i></span>
-                  <span class="pcoded-mtext">{{ app.label|slice:10 }}{% if app.label|length > 10 %}..{% endif %}</span>
-                </a>
-                {% if app.models %}
-                  <ul class="pcoded-submenu">
-                    {% for model in app.models %}
-                      {% if model.url %}
-                        <li class="nav-item {% if 'bootstrap-tables' in segment or model.url in request.path|urlencode %} active {% endif %}">
-                          <a class="nav-link" href="{{ model.url }}">{{ model.label }}</a>
-                        </li>
-                      {% else %}
-                        <li class="nav-item">{{ model.label }}</li>
-                      {% endif %}
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </li>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-
-        {% if request.user.is_authenticated %}
-        <li
-          data-username="Authentication Sign up Sign in reset password Change password Personal information profile settings map form subscribe"
-          class="nav-item pcoded-hasmenu">
-          <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
-                class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
-          <ul class="pcoded-submenu">
-            {% if request.user.is_authenticated %}
-            <li class=""><a href="{% url 'tasks:logout' %}?next=/" class="" target="_blank">Log out</a></li>
-            {% else %}
-            <li class=""><a href="{% url 'tasks:register' %}" class="" target="_blank">Sign up</a></li>
-            <li class=""><a href="{% url 'tasks:login' %}" class="" target="_blank">Sign in</a></li>
-            {% endif %}
-          </ul>
-        </li>
-        <li data-username="Profile Page" class="nav-item {% if 'profile' in segment %}active{% endif %}"><a href="#" class="nav-link"><span
-              class="pcoded-micon"><i class="feather icon-user"></i></span><span class="pcoded-mtext">Profile
-              Page</span></a>
-        </li>
+        {% else %}
+          <li data-username="Authentication Sign up Sign in reset password Change password Personal information profile settings map form subscribe" class="nav-item pcoded-hasmenu">
+            <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
+            <ul class="pcoded-submenu">
+              <li><a href="{% url 'tasks:logout' %}?next=/" target="_blank">Log out</a></li>
+            </ul>
+          </li>
+          <li data-username="Profile Page" class="nav-item {% if 'profile' in segment %}active{% endif %}">
+            <a href="{% url 'tasks:profile-detail' %}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-user"></i></span><span class="pcoded-mtext">Profile Page</span></a>
+          </li>
         {% endif %}
       </ul>
     </div>
