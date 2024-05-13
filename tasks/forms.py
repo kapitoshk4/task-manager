@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from tasks.models import Project, ChatMessage, Worker, Task, TaskComment
+from tasks.models import Project, ChatMessage, Worker, Task, TaskComment, TaskType
 
 
 class RegistrationForm(UserCreationForm):
@@ -136,36 +136,54 @@ class ProjectSearchForm(forms.Form):
 
 
 class TaskForm(forms.ModelForm):
+    name = forms.CharField(
+        error_messages={"required": "Please enter a name."},
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Name"
+        })
+    )
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={
+            "class": "form-control",
+            "placeholder": "Description"
+        }),
+        required=False
+    )
+    deadline = forms.DateField(
+        error_messages={"required": "Please enter a deadline."},
+        widget=forms.DateInput(attrs={
+            "class": "form-control",
+            "placeholder": "Date of deadline",
+            "type": "date"
+        })
+    )
+    priority = forms.ChoiceField(
+        choices=Task.PRIORITY_CHOICES,
+        widget=forms.Select(attrs={
+            "class": "form-control",
+            "placeholder": "Priority"
+        })
+    )
+    status = forms.ChoiceField(
+        choices=Task.STATUS_CHOICES,
+        widget=forms.Select(attrs={
+            "class": "form-control",
+            "placeholder": "Status"
+        })
+    )
+    task_type = forms.ModelChoiceField(
+        error_messages={"required": "Please enter a task type."},
+        queryset=TaskType.objects.all(),
+        widget=forms.Select(attrs={
+            "class": "form-control",
+            "placeholder": "Task type"
+        })
+    )
+
     class Meta:
         model = Task
         fields = ["name", "description", "deadline", "priority", "status", "task_type"]
-
-        widgets = {
-            "name": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Name"
-            }),
-            "description": forms.Textarea(attrs={
-                "class": "form-control",
-                "placeholder": "Description"
-            }),
-            "deadline": forms.DateInput(attrs={
-                "class": "form-control",
-                "placeholder": "Date of deadline"
-            }),
-            "priority": forms.Select(attrs={
-                "class": "form-control",
-                "placeholder": "Priority"
-            }),
-            "status": forms.Select(attrs={
-                "class": "form-control",
-                "placeholder": "Status"
-            }),
-            "task_type": forms.Select(attrs={
-                "class": "form-control",
-                "placeholder": "Task type"
-            })
-        }
 
 
 class CommentForm(forms.ModelForm):
