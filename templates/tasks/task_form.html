@@ -15,18 +15,7 @@
             <div class="col-md-6">
               <form action="" method="post" novalidate>
                 {% csrf_token %}
-                  <label>Title</label>
-                  {{ form.name }}
-                  <label for="exampleFormControlTextarea1">Description</label>
-                  {{ form.description }}
-                  <label for="exampleFormControlTextarea1">Deadline</label>
-                  {{ form.deadline }}
-                  <label for="exampleFormControlTextarea1">Priority</label>
-                  {{ form.priority }}
-                  <label for="exampleFormControlTextarea1">Status</label>
-                  {{ form.status }}
-                  <label for="exampleFormControlTextarea1">Task type</label>
-                  {{ form.task_type }}
+                  {{ form.as_p }}
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
             </div>
