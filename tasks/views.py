@@ -106,7 +106,7 @@ class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
 
     def dispatch(self, request, *args, **kwargs):
         project = get_object_or_404(Project, id=self.kwargs["pk"])
-        if request.user in project.assignees.all():
+        if request.user in project.assignees.all() or request.user == project.creator:
             return super().dispatch(request, *args, **kwargs)
         else:
             return HttpResponseForbidden("You do not have permission to view this page.")
@@ -117,7 +117,6 @@ def task_detail_view(request, pk, task_pk):
     project = get_object_or_404(Project, pk=pk)
     task = get_object_or_404(Task, id=task_pk)
     comments = TaskComment.objects.filter(task=task)
-
     if request.user not in project.assignees.all():
         return HttpResponseForbidden("You do not have permission to this page.")
 
@@ -368,6 +367,7 @@ class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         profile = form.save(commit=False)
         profile.user = self.request.user
+        profile.profile_image = self.request.FILES.get("profile_image")
         profile.save()
 
         return super().form_valid(form)
