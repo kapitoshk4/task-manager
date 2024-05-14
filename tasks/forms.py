@@ -211,7 +211,7 @@ class ProjectTaskSearchForm(forms.Form):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Worker
-        fields = ["first_name", "last_name", "email", "position", ]
+        fields = ["first_name", "last_name", "email", "position", "profile_image", ]
 
         widgets = {
             "first_name": forms.TextInput(attrs={
@@ -229,5 +229,9 @@ class ProfileForm(forms.ModelForm):
             "position": forms.Select(attrs={
                 "class": "form-control",
                 "placeholder": "Position"
+            }),
+            "profile_image": forms.FileInput(attrs={
+                "class": "form-control",
+                "placeholder": "File"
             })
         }
