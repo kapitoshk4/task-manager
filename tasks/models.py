@@ -22,6 +22,7 @@ class TaskType(models.Model):
 
 
 class Worker(AbstractUser):
+    profile_image = models.ImageField(upload_to='profile_pictures', blank=True)
     position = models.ForeignKey(Position, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
@@ -72,6 +73,7 @@ class Task(models.Model):
                                   related_name="tasks",
                                   on_delete=models.SET_NULL,
                                   null=True)
+    modified = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
 
@@ -94,3 +96,6 @@ class TaskComment(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="comments")
+
+    class Meta:
+        ordering = ("-date", )
