@@ -47,7 +47,11 @@
           <div class="dropdown-menu dropdown-menu-right profile-notification">
             <div class="pro-head">
               {% if user.is_authenticated %}
-              <img src="{% static 'assets/images/user/avatar-1.jpg' %}" class="img-radius" alt="User-Profile-Image">
+                {% if user.profile_image and user.profile_image.url %}
+                  <img src="{{ user.profile_image.url }}" class="img-radius" alt="User-Profile-Image">
+                {% else %}
+                  <img src="{% static 'assets/images/user/anon.jpg' %}" class="img-radius" alt="User-Profile-Image">
+                {% endif %}
               <span>{{ user.get_username }}</span>
                 <a href="{% url 'tasks:logout' %}" class="dud-logout" title="Logout">
                   <i class="feather icon-log-out"></i>
