@@ -3,13 +3,9 @@ from django.contrib.auth.forms import (
     UserCreationForm,
     AuthenticationForm,
     PasswordChangeForm,
-    UsernameField,
-    PasswordResetForm,
-    SetPasswordForm
+    UsernameField
 )
-from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
 
 from tasks.models import Project, ChatMessage, Worker, Task, TaskComment, TaskType
 
@@ -71,13 +67,13 @@ class LoginForm(AuthenticationForm):
 
 class UserPasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
-        'class': 'form-control', 'placeholder': 'Old Password'
-    }), label='Old Password')
+        "class": "form-control", "placeholder": "Old Password"
+    }), label="Old Password")
     new_password1 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
-        'class': 'form-control', 'placeholder': 'New Password'
+        "class": "form-control", "placeholder": "New Password"
     }), label="New Password")
     new_password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
-        'class': 'form-control', 'placeholder': 'Confirm New Password'
+        "class": "form-control", "placeholder": "Confirm New Password"
     }), label="Confirm New Password")
 
 
@@ -151,12 +147,12 @@ class TaskForm(forms.ModelForm):
         required=False
     )
     deadline = forms.DateField(
-        error_messages={"required": "Please enter a deadline."},
         widget=forms.DateInput(attrs={
             "class": "form-control",
             "placeholder": "Date of deadline",
             "type": "date"
-        })
+        }),
+        required=False
     )
     priority = forms.ChoiceField(
         choices=Task.PRIORITY_CHOICES,
