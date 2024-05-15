@@ -1,9 +1,10 @@
+{% load static %}
 <nav class="pcoded-navbar">
   <div class="navbar-wrapper">
     <div class="navbar-brand header-logo">
       <a href="{% url 'tasks:index' %}" class="b-brand">
         <div class="b-bg">
-          <i class="feather icon-trending-up"></i>
+          <img src="{% static 'assets/images/logo.png' %}" class="img-radius img-logo">
         </div>
         <span class="b-title">Task Manager</span>
       </a>
