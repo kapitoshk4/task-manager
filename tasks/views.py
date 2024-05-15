@@ -9,8 +9,7 @@ from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
-from django.http import HttpResponseForbidden, HttpResponseNotFound, Http404
-from django.views.generic import DetailView
+from django.http import HttpResponseForbidden
 
 from tasks.forms import (
     RegistrationForm,
@@ -25,7 +24,13 @@ from tasks.forms import (
     ProjectTaskSearchForm,
     ProfileForm
 )
-from tasks.models import Task, Project, ChatMessage, TaskComment, Worker
+from tasks.models import (
+    Task,
+    Project,
+    ChatMessage,
+    TaskComment,
+    Worker
+)
 
 
 def index(request):
@@ -83,8 +88,8 @@ def task_list_view(request, pk):
 
 class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
-    template_name = 'tasks/project_task_list.html'
-    context_object_name = 'project_tasks'
+    template_name = "tasks/project_task_list.html"
+    context_object_name = "project_tasks"
     paginate_by = 10
 
     def get_queryset(self):
