@@ -22,7 +22,7 @@ class TaskType(models.Model):
 
 
 class Worker(AbstractUser):
-    profile_image = models.ImageField(upload_to='profile_pictures', blank=True)
+    profile_image = models.ImageField(upload_to="profile_pictures", blank=True)
     position = models.ForeignKey(Position, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
@@ -41,6 +41,9 @@ class Project(models.Model):
 
     def get_absolute_url(self):
         return reverse("tasks:project-detail", kwargs={"pk": self.pk})
+
+    def __str__(self):
+        return f"{self.title} - creator: {self.creator}"
 
 
 class Task(models.Model):
@@ -66,7 +69,7 @@ class Task(models.Model):
 
     name = models.CharField(max_length=63)
     description = models.TextField()
-    deadline = models.DateField()
+    deadline = models.DateField(null=True, blank=True)
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default=MEDIUM)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=TODO)
     task_type = models.ForeignKey(TaskType,
@@ -81,7 +84,7 @@ class Task(models.Model):
         return f"{self.name} {self.deadline}"
 
     def get_absolute_url(self):
-        return reverse("tasks:task-detail", kwargs={"pk": self.pk})
+        return reverse("tasks:task-detail", kwargs={"pk": self.project.pk, "task_pk": self.pk})
 
 
 class ChatMessage(models.Model):
