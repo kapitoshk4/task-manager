@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
+from django.db.models import Q
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -218,7 +219,7 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = self.queryset.filter(creator=user) | self.queryset.filter(assignees=user)
+        queryset = Project.objects.filter(Q(creator=user) | Q(assignees=user)).distinct()
 
         form = ProjectSearchForm(self.request.GET)
         if form.is_valid():
