@@ -119,6 +119,7 @@ strong {
 
 .img-radius {
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .page-header-title + .breadcrumb {
@@ -631,7 +632,10 @@ p.text-muted {
 .datta-example-modal-content > .messages > p {
   display: inline-block;
   border-radius: 5px;
-  padding: 10px
+  padding: 10px;
+  word-wrap: break-word;
+  object-fit: cover;
+  max-width: 880px;
 }
 .datta-example-modal-content > pre {
   overflow: hidden;
@@ -643,6 +647,12 @@ p.text-muted {
   padding: 0;
   background: none;
   font-size: 16px;
+}
+
+.img-logo {
+  position: absolute;
+  width: 50px;
+  height: auto;
 }
 
 .md-datta-example-modal-copy {
@@ -1562,7 +1572,7 @@ p.text-muted {
           align-items: center;
 }
 .b-brand .b-bg {
-  background: linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%);
+  position: relative;
   border-radius: 10px;
   width: 35px;
   height: 35px;
@@ -1980,6 +1990,7 @@ p.text-muted {
 .pcoded-header .dropdown .profile-notification .pro-head img {
   width: 40px;
   margin-right: 10px;
+  height: 40px;
 }
 .pcoded-header .dropdown .profile-notification .pro-head .dud-logout {
   color: #fff;
@@ -2345,11 +2356,6 @@ p.text-muted {
   width: 80px;
 }
 .pcoded-navbar.navbar-collapsed .header-logo img {
-  -webkit-transform: rotateY(-90deg);
-          transform: rotateY(-90deg);
-  -webkit-transform-origin: 0 0;
-          transform-origin: 0 0;
-  opacity: 0;
   -webkit-transition: unset;
   transition: unset;
 }
@@ -9343,6 +9349,7 @@ div.code-toolbar > .toolbar span:hover {
   background-color: #3f4d67;
   border-radius: 0 15px 0 0;
   padding-left: 10px;
+  font-size: 24px
 }
 
 hr:last-child {
@@ -9369,6 +9376,32 @@ hr:last-child {
     background-color: #ffcccc;
 }
 
+.user-comment {
+  margin: 10px;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.comment-message {
+  background-color: #9fcdff;
+  padding: 10px;
+  border-radius: 12px;
+  max-width: 305px;
+  height: max-content;
+}
+
+.comment-message > p {
+  word-wrap: break-word;
+  margin: 0;
+  color: black
+}
+
+.img-avatar {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
 /**====== Toolbar css end ======**/
 /**  =====================
       Switches css start
