@@ -3,7 +3,6 @@
 
 {% block content %}
   {% if request.user.is_authenticated %}
-  <!-- [ Main Content ] start -->
     <div class="page-header-title">
         <h2 class="m-b-20">Projects
             <a href="{% url 'tasks:project-create' %}" class="btn btn-primary float-right">Create</a>
@@ -12,7 +11,6 @@
     {% if project_list %}
       {% for project in project_list %}
         <div class="row">
-            <!-- [ basic-table ] start -->
             <div class="col-xl-12">
               <div class="card">
                 <div class="card-header">
@@ -38,7 +36,5 @@
     {% else %}
       <h1>You don't have any project</h1>
     {% endif %}
-    <!-- [ basic-table ] end -->
   {% endif %}
 {% endblock %}
-<!-- [ Main Content ] end -->

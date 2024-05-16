@@ -3,7 +3,6 @@
 
 {% block content %}
   {% if request.user.is_authenticated %}
-  <!-- [ Main Content ] start -->
   <div class="row">
     <div class="col-md-6 col-xl-4">
       <div class="card daily-sales">
@@ -15,13 +14,10 @@
                 {{ num_projects }}
               </h3>
             </div>
-            
           </div>
         </div>
       </div>
     </div>
-    <!--[ daily sales section ] end-->
-    <!--[ Monthly  sales section ] starts-->
     <div class="col-md-6 col-xl-4">
       <div class="card Monthly-sales">
         <div class="card-block">
@@ -36,10 +32,8 @@
         </div>
       </div>
     </div>
-    <!--[ Monthly  sales section ] end-->
   </div>
   {% else %}
     <h2><a href="{% url 'tasks:login' %}">Log in</a> to view your count of projects and tasks.</h2>
   {% endif %}
 {% endblock %}
-<!-- [ Main Content ] end -->

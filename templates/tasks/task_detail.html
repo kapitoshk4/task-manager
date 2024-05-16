@@ -3,7 +3,6 @@
 
 {% block content %}
   {% if request.user.is_authenticated %}
-  <!-- [ Main Content ] start -->
     <div class="page-header-title">
       <h2 class="m-b-20">{% if user == task.creator %}Your{% else %}{{ task.creator.username }}'s{% endif %} Task
         {% if user == task.creator %}
@@ -12,7 +11,6 @@
       </h2>
     </div>
       <div class="row">
-        <!-- [ basic-table ] start -->
         <div class="col-xl-12">
           <div class="card">
             <div class="card-header">
@@ -50,8 +48,6 @@
         </a>
       </span>
     {% endif %}
-    <!-- [ basic-table ] end -->
     {% include "includes/comments.html" %}
   {% endif %}
 {% endblock %}
-<!-- [ Main Content ] end -->
