@@ -9,7 +9,7 @@ from django.db.models import Q
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views import generic, View
 from django.http import HttpResponseForbidden
 
 from tasks.forms import (
@@ -34,19 +34,24 @@ from tasks.models import (
 )
 
 
-def index(request):
-    if request.user.is_authenticated:
-        num_projects = (
-                Project.objects.filter(creator=request.user).count() +
-                Project.objects.filter(assignees=request.user).distinct().count()
-        )
-        num_tasks = Task.objects.filter(creator=request.user).count()
-        context = {
-            "num_projects": num_projects,
-            "num_tasks": num_tasks
-        }
-        return render(request, "tasks/index.html", context)
-    return render(request, "tasks/index.html")
+class IndexView(generic.View):
+    template_name = "tasks/index.html"
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            num_projects = (
+                    Project.objects.filter(creator=request.user).count() +
+                    Project.objects.filter(assignees=request.user).distinct().count()
+            )
+            num_tasks = Task.objects.filter(creator=request.user).count()
+            context = {
+                "num_projects": num_projects,
+                "num_tasks": num_tasks
+            }
+
+            return render(request, self.template_name, context)
+
+        return render(request, self.template_name)
 
 
 class UserLoginView(LoginView):
@@ -54,9 +59,12 @@ class UserLoginView(LoginView):
     form_class = LoginForm
 
 
-def logout_view(request):
-    logout(request)
-    return redirect("/")
+class LogoutView(View):
+    @staticmethod
+    def get(request, *args, **kwargs):
+        logout(request)
+
+        return redirect("/")
 
 
 class UserRegistrationView(generic.CreateView):
@@ -71,20 +79,24 @@ class UserPasswordChangeView(PasswordChangeView):
     template_name = "accounts/change_password.html"
 
 
-@login_required
-def task_list_view(request, pk):
-    project = get_object_or_404(Project, id=pk)
+class TaskListView(LoginRequiredMixin, generic.ListView):
+    model = Task
+    template_name = "tasks/task_list.html"
+    context_object_name = "task_list"
 
-    if request.user == project.creator or request.user in project.assignees.all():
-        user_tasks = Task.objects.filter(project=project, creator=request.user)
-        context = {
-            "project": project,
-            "task_list": user_tasks,
-            "show_tabs": True
-        }
-        return render(request, "tasks/task_list.html", context)
-    else:
-        return HttpResponseForbidden("You do not have permission to view this page.")
+    def get_queryset(self):
+        project = get_object_or_404(Project, id=self.kwargs["pk"])
+        queryset = super().get_queryset().filter(project=project, creator=self.request.user)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project = get_object_or_404(Project, id=self.kwargs["pk"])
+        context["project"] = project
+        context["show_tabs"] = True
+
+        return context
 
 
 class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
@@ -99,6 +111,7 @@ class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
         search_query = self.request.GET.get("title", None)
         if search_query:
             queryset = queryset.filter(name__icontains=search_query)
+
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -108,44 +121,60 @@ class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = ProjectTaskSearchForm()
         context["show_tabs"] = True
         context["show_search"] = True
+
         return context
 
     def dispatch(self, request, *args, **kwargs):
         project = get_object_or_404(Project, id=self.kwargs["pk"])
         if request.user in project.assignees.all() or request.user == project.creator:
             return super().dispatch(request, *args, **kwargs)
-        else:
-            return HttpResponseForbidden("You do not have permission to view this page.")
+
+        return HttpResponseForbidden("You do not have permission to view this page.")
 
 
-@login_required
-def task_detail_view(request, pk, task_pk):
-    project = get_object_or_404(Project, pk=pk)
-    task = get_object_or_404(Task, id=task_pk)
-    comments = TaskComment.objects.filter(task=task)
-    if request.user not in project.assignees.all():
-        return HttpResponseForbidden("You do not have permission to this page.")
+class TaskDetailView(LoginRequiredMixin, generic.View):
+    @staticmethod
+    def get(request, pk, task_pk):
+        project = get_object_or_404(Project, pk=pk)
+        task = get_object_or_404(Task, id=task_pk)
+        comments = TaskComment.objects.filter(task=task)
+        if request.user not in project.assignees.all():
+            return HttpResponseForbidden("You do not have permission to this page.")
+        form = CommentForm()
+        context = {
+            "form": form,
+            "task": task,
+            "project": project,
+            "show_tabs": True,
+            "comments": comments
+        }
 
-    if request.method == "POST":
+        return render(request, "tasks/task_detail.html", context)
+
+    @staticmethod
+    def post(request, pk, task_pk):
+        project = get_object_or_404(Project, pk=pk)
+        task = get_object_or_404(Task, id=task_pk)
+        comments = TaskComment.objects.filter(task=task)
+        if request.user not in project.assignees.all():
+            return HttpResponseForbidden("You do not have permission to this page.")
         form = CommentForm(request.POST)
-
         if form.is_valid():
             comment = form.save(commit=False)
             comment.sender = request.user
             comment.task = task
             comment.save()
-    else:
-        form = CommentForm()
+        else:
+            form = CommentForm()
+        context = {
+            "form": form,
+            "task": task,
+            "project": project,
+            "show_tabs": True,
+            "comments": comments
+        }
 
-    context = {
-        "form": form,
-        "task": task,
-        "project": project,
-        "show_tabs": True,
-        "comments": comments
-    }
-
-    return render(request, "tasks/task_detail.html", context)
+        return render(request, "tasks/task_detail.html", context)
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
@@ -158,56 +187,81 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.creator_id = self.request.user.id
         form.instance.project_id = self.kwargs["pk"]
         self.success_url = reverse_lazy("tasks:task-list", kwargs={"pk": self.kwargs["pk"]})
+
         return super().form_valid(form)
 
 
-@login_required
-def task_update_view(request, pk, task_pk):
-    project = get_object_or_404(Project, pk=pk)
-    task = get_object_or_404(Task, id=task_pk)
+class TaskUpdateView(LoginRequiredMixin, generic.View):
+    @staticmethod
+    def get(request, pk, task_pk):
+        project = get_object_or_404(Project, pk=pk)
+        task = get_object_or_404(Task, id=task_pk)
 
-    if request.user != task.creator:
-        return HttpResponseForbidden("You do not have permission to this page.")
+        if request.user != task.creator:
+            return HttpResponseForbidden("You do not have permission to this page.")
 
-    if request.method == "POST":
+        form = TaskForm(instance=task)
+
+        context = {
+            "form": form,
+            "project": project,
+            "task": task,
+            "show_tabs": True
+        }
+
+        return render(request, "tasks/task_form.html", context)
+
+    @staticmethod
+    def post(request, pk, task_pk):
+        project = get_object_or_404(Project, pk=pk)
+        task = get_object_or_404(Task, id=task_pk)
+
+        if request.user != task.creator:
+            return HttpResponseForbidden("You do not have permission to this page.")
+
         form = TaskForm(request.POST, instance=task)
+
         if form.is_valid():
             form.instance.creator_id = request.user.id
             form.instance.project_id = pk
             form.save()
+
             return redirect("tasks:task-list", pk=pk)
-    else:
-        form = TaskForm(instance=task)
 
-    context = {
-        "form": form,
-        "project": project,
-        "task": task,
-        "show_tabs": True
-    }
+        context = {
+            "form": form,
+            "project": project,
+            "task": task,
+            "show_tabs": True
+        }
 
-    return render(request, "tasks/task_form.html", context)
+        return render(request, "tasks/task_form.html", context)
 
 
-@login_required
-def task_delete_view(request, pk, task_pk):
-    project = get_object_or_404(Project, pk=pk)
-    task = get_object_or_404(Task, id=task_pk)
+class TaskDeleteView(LoginRequiredMixin, generic.View):
+    @staticmethod
+    def post(request, pk, task_pk):
+        task = get_object_or_404(Task, id=task_pk)
 
-    if request.user != task.creator:
-        return HttpResponseForbidden("You do not have permission to this page.")
+        if request.user != task.creator:
+            return HttpResponseForbidden("You do not have permission to this page.")
 
-    if request.method == "POST":
         task.delete()
+
         return redirect("tasks:task-list", pk=pk)
 
-    context = {
-        "project": project,
-        "task": task,
-        "show_tabs": True
-    }
+    @staticmethod
+    def get(request, pk, task_pk):
+        project = get_object_or_404(Project, pk=pk)
+        task = get_object_or_404(Task, id=task_pk)
 
-    return render(request, "tasks/task_confirm_delete.html", context)
+        context = {
+            "project": project,
+            "task": task,
+            "show_tabs": True
+        }
+
+        return render(request, "tasks/task_confirm_delete.html", context)
 
 
 class ProjectListView(LoginRequiredMixin, generic.ListView):
@@ -239,18 +293,23 @@ class ProjectListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-@login_required
-def project_detail(request, pk):
-    project = get_object_or_404(Project, id=pk)
+class ProjectDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Project
+    template_name = "tasks/project_detail.html"
+    context_object_name = "project"
 
-    if request.user == project.creator or request.user in project.assignees.all():
-        context = {
-            "project": project,
-            "show_tabs": True
-        }
+    def dispatch(self, request, *args, **kwargs):
+        if request.user == self.get_object().creator or request.user in self.get_object().assignees.all():
+            return super().dispatch(request, *args, **kwargs)
 
-        return render(request, "tasks/project_detail.html", context)
-    return HttpResponseForbidden("You do not have permission to this project.")
+        return HttpResponseForbidden("You do not have permission to this page")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["show_tabs"] = True
+        context["project"] = self.object
+
+        return context
 
 
 class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
@@ -276,6 +335,7 @@ class ProjectUpdateView(LoginRequiredMixin, generic.UpdateView):
     def dispatch(self, request, *args, **kwargs):
         if self.get_object().creator != self.request.user:
             return HttpResponseForbidden("You do not have permission to this project.")
+
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -286,69 +346,101 @@ class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
     def dispatch(self, request, *args, **kwargs):
         if self.get_object().creator != self.request.user:
             return HttpResponseForbidden("You do not have permission to this project.")
+
         return super().dispatch(request, *args, **kwargs)
 
 
-@login_required
-def generate_code_view(request, pk):
-    project = get_object_or_404(Project, id=pk)
-    if request.user != project.creator:
-        return HttpResponseForbidden("You do not have permission to this project.")
+class GenerateCodeView(LoginRequiredMixin, generic.View):
+    @staticmethod
+    def get(request, pk):
+        project = get_object_or_404(Project, id=pk)
+        if request.user != project.creator:
+            return HttpResponseForbidden("You do not have permission to this project.")
 
-    project.invitation_code = uuid.uuid4()
-    project.save()
-    context = {
-        "project": project
-    }
-    return render(request, "tasks/project_invitation.html", context)
+        project.invitation_code = uuid.uuid4()
+        project.save()
+        context = {
+            "project": project
+        }
+
+        return render(request, "tasks/project_invitation.html", context)
 
 
-@login_required
-def join_project_view(request):
-    form = JoinProjectForm(request.POST or None)
-    if request.method == "POST":
+class JoinProjectView(LoginRequiredMixin, generic.View):
+    @staticmethod
+    def get(request):
+        form = JoinProjectForm()
+
+        return render(request, "tasks/project_join_form.html", {"form": form})
+
+    @staticmethod
+    def post(request):
+        form = JoinProjectForm(request.POST)
         if form.is_valid():
-            invitation_code = request.POST.get("invitation_code")
+            invitation_code = form.cleaned_data.get("invitation_code")
             try:
                 project = Project.objects.get(invitation_code=invitation_code)
             except Project.DoesNotExist:
                 messages.warning(request, "Invalid invitation code.")
+
                 return redirect("tasks:project-join")
             if project.assignees.filter(id=request.user.id).exists():
                 messages.warning(request, "You are already a member of this project.")
+
                 return redirect("tasks:project-join")
             project.assignees.add(request.user)
+
             return redirect(project.get_absolute_url())
         else:
             error_message = form.errors.get("invitation_code")
             if error_message:
                 messages.warning(request, error_message)
-    return render(request, "tasks/project_join_form.html", {"form": form})
+
+            return render(request, "tasks/project_join_form.html", {"form": form})
 
 
-@login_required
-def chat_messages_view(request, pk):
-    project = get_object_or_404(Project, id=pk)
+class ChatMessagesView(LoginRequiredMixin, generic.View):
+    @staticmethod
+    def get(request, pk):
+        project = get_object_or_404(Project, id=pk)
 
-    if request.user == project.creator or request.user in project.assignees.all():
-        if request.method == "POST":
+        if request.user == project.creator or request.user in project.assignees.all():
+            messages_connected = ChatMessage.objects.filter(project=project)
+            context = {
+                "project": project,
+                "messages": messages_connected,
+                "message_form": ChatMessageForm(),
+                "show_tabs": True
+            }
+
+            return render(request, "tasks/chat_messages.html", context)
+
+        return HttpResponseForbidden("You do not have permission to view this project.")
+
+    @staticmethod
+    def post(request, pk):
+        project = get_object_or_404(Project, id=pk)
+
+        if request.user == project.creator or request.user in project.assignees.all():
             message_form = ChatMessageForm(request.POST)
             if message_form.is_valid():
                 new_message = message_form.save(commit=False)
                 new_message.project = project
                 new_message.sender = request.user
                 new_message.save()
-                return redirect("tasks:project-chat", pk=pk)
 
-        messages_connected = ChatMessage.objects.filter(project=project)
-        context = {
-            "project": project,
-            "messages": messages_connected,
-            "message_form": ChatMessageForm(),
-            "show_tabs": True
-        }
-        return render(request, "tasks/chat_messages.html", context)
-    else:
+                return redirect("tasks:project-chat", pk=pk)
+            else:
+                messages_connected = ChatMessage.objects.filter(project=project)
+                context = {
+                    "project": project,
+                    "messages": messages_connected,
+                    "message_form": message_form,
+                    "show_tabs": True
+                }
+
+                return render(request, "tasks/chat_messages.html", context)
+
         return HttpResponseForbidden("You do not have permission to view this project.")
 
 
