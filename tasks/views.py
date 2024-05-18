@@ -39,11 +39,14 @@ class IndexView(generic.View):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            num_projects = Project.objects.filter(
+            user_projects = Project.objects.filter(
                 Q(creator=request.user) | Q(assignees=request.user)
-            ).distinct().count()
+            ).distinct()
 
+            project_ids = set(user_projects.values_list('id', flat=True))
+            num_projects = len(project_ids)
             num_tasks = Task.objects.filter(creator=request.user).count()
+
             context = {
                 "num_projects": num_projects,
                 "num_tasks": num_tasks
