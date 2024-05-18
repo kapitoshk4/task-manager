@@ -1,0 +1,32 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+    <div class="page-header-title">
+      <h2 class="m-b-20">Join project</h2>
+    </div>
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header">
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+              <form action="" method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                  {{ form.invitation_code }}
+                </div>
+                <button type="submit" class="btn btn-primary">Join</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  {% endif %}
+{% endblock %}

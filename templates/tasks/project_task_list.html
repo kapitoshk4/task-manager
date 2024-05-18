@@ -1,0 +1,42 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  <div class="page-header-title">
+    <h2 class="m-b-20">Project tasks</h2>
+  </div>
+  <div class="col-xl-12">
+    <div class="card">
+      <div class="card-header">
+        <h5>{{ project.title }} tasks</h5>
+      </div>
+      <div class="card-block table-border-style">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Task title</th>
+                <th>Creator</th>
+                <th>Position</th>
+                <th>Task status</th>
+                <th>Deadline</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% if project_tasks %}
+              {% for task in project_tasks %}
+                <tr>
+                  <td><a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a></td>
+                  <td>{{ task.creator.username }}</td>
+                  <td>{{ task.creator.position }}</td>
+                  <td>{{ task.status }}</td>
+                  <td>{{ task.deadline }}</td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

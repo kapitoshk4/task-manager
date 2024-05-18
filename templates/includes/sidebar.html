@@ -1,0 +1,77 @@
+{% load static %}
+<nav class="pcoded-navbar">
+  <div class="navbar-wrapper">
+    <div class="navbar-brand header-logo">
+      <a href="{% url 'tasks:index' %}" class="b-brand">
+        <div class="b-bg">
+          <img src="{% static 'assets/images/logo.png' %}" class="img-radius img-logo">
+        </div>
+        <span class="b-title">Task Manager</span>
+      </a>
+      <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
+    </div>
+    <div class="navbar-content scroll-div">
+      <ul class="nav pcoded-inner-navbar">
+        <li class="nav-item pcoded-menu-caption">
+          <label>Navigation</label>
+        </li>
+        <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
+          <a href="{% url 'tasks:project-list' %}" class="nav-link ">
+            <span class="pcoded-micon"><i class="feather icon-folder"></i></span><span class="pcoded-mtext">Projects</span>
+          </a>
+        </li>
+        <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
+          <a href="{% url 'tasks:project-join' %}" class="nav-link ">
+            <span class="pcoded-micon"><i class="feather icon-plus"></i></span><span class="pcoded-mtext">Join Project</span>
+          </a>
+        </li>
+        {% if show_tabs %}
+          <li class="nav-item pcoded-hasmenu">
+            <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i 
+              class="feather icon-layers"></i></span><span class="pcoded-mtext">{{ project.title }}</span></a>
+            <ul class="pcoded-submenu">
+              <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
+                <a href="{% url 'tasks:project-task-list' pk=project.id %}" class="nav-link ">
+                  <span class="pcoded-micon"><i class="feather icon-server"></i></span><span class="pcoded-mtext">Project Tasks</span>
+                </a>
+              </li>
+              <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
+                <a href="{% url 'tasks:task-list' pk=project.id %}" class="nav-link ">
+                  <span class="pcoded-micon"><i class="feather icon-briefcase"></i></span><span class="pcoded-mtext">Your Tasks</span>
+                </a>
+              </li>
+              <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item">
+                <a href="{% url 'tasks:project-chat' pk=project.id %}" class="nav-link ">
+                  <span class="pcoded-micon"><i class="feather icon-message-square"></i></span><span class="pcoded-mtext">Chat</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        {% endif %}
+
+        {% if not request.user.is_authenticated %}
+        <li
+          data-username="Authentication Sign up Sign in reset password Change password Personal information profile settings map form subscribe"
+          class="nav-item pcoded-hasmenu">
+          <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
+                class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
+          <ul class="pcoded-submenu">
+            <li class=""><a href="{% url 'tasks:login' %}" class="">Sign IN</a></li>
+            <li class=""><a href="{% url 'tasks:register' %}" class="">Sign UP</a></li>
+          </ul>
+        </li>
+        {% else %}
+          <li data-username="Authentication Sign up Sign in reset password Change password Personal information profile settings map form subscribe" class="nav-item pcoded-hasmenu">
+            <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-lock"></i></span><span class="pcoded-mtext">Authentication</span></a>
+            <ul class="pcoded-submenu">
+              <li><a href="{% url 'tasks:logout' %}?next=/" target="_blank">Log out</a></li>
+            </ul>
+          </li>
+          <li data-username="Profile Page" class="nav-item {% if 'profile' in segment %}active{% endif %}">
+            <a href="{% url 'tasks:profile-detail' %}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-user"></i></span><span class="pcoded-mtext">Profile Page</span></a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

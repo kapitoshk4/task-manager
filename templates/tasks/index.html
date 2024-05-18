@@ -1,0 +1,39 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+  <div class="row">
+    <div class="col-md-6 col-xl-4">
+      <div class="card daily-sales">
+        <div class="card-block">
+          <h6 class="mb-4">Your Projects</h6>
+          <div class="row d-flex align-items-center">
+            <div class="col-9">
+              <h3 class="f-w-300 d-flex align-items-center m-b-0">
+                {{ num_projects }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+      <div class="card Monthly-sales">
+        <div class="card-block">
+          <h6 class="mb-4">Your Tasks</h6>
+          <div class="row d-flex align-items-center">
+            <div class="col-9">
+              <h3 class="f-w-300 d-flex align-items-center  m-b-0">
+                {{ num_tasks }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <h2><a href="{% url 'tasks:login' %}">Log in</a> to view your count of projects and tasks.</h2>
+  {% endif %}
+{% endblock %}

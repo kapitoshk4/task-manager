@@ -1,0 +1,59 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+      <div class="page-header-title">
+        <h2 class="m-b-20">Your Tasks
+            <a href="{% url 'tasks:task-add' pk=project.id %}" class="btn btn-primary float-right">Add</a>
+        </h2>
+      </div>
+      <ul class="tasks__list">
+        <li class="tasks__list-item">
+          <ul class="tasks__list-type">
+            <li class="tasks__list-type-status">To do</li>
+            {% if task_list %}
+              {% for task in task_list %}
+                {% if task.status == "To do" %}
+                  <li class="tasks__list-type-task {% if task.priority == 'Low' %} low-priority {% elif task.priority == 'Medium' %} medium-priority {% elif task.priority == 'High' %} high-priority {% endif %}">
+                    <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
+                    <p>({{ task.deadline }})</p>
+                  </li>
+                  <hr style="border:2px solid white; width: 80%">
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </li>
+        <li class="tasks__list-item">
+          <ul class="tasks__list-type">
+            <li class="tasks__list-type-status">Doing</li>
+            {% if task_list %}
+              {% for task in task_list %}
+                {% if task.status == "Doing" %}
+                  <li class="tasks__list-type-task {% if task.priority == 'Low' %} low-priority {% elif task.priority == 'Medium' %} medium-priority {% elif task.priority == 'High' %} high-priority {% endif %}">
+                    <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
+                    <p>({{ task.deadline }})</p>
+                  </li>       
+                  <hr style="border:2px solid white; width: 80%">
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </li>
+        <li class="tasks__list-item">
+          <ul class="tasks__list-type">
+            <li class="tasks__list-type-status">Done</li>
+            {% if task_list %}
+              {% for task in task_list %}
+                {% if task.status == "Done" %}
+                  <li class="tasks__list-type-task done-task">
+                    <a href="{% url 'tasks:task-detail' pk=project.id task_pk=task.id %}">{{ task.name }}</a>
+                    <p>({{ task.deadline }})</p>
+                  </li>
+                  <hr style="border:2px solid white; width: 80%">
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </li>
+      </ul>
+{% endblock %}

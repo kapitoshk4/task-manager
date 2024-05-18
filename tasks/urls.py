@@ -1,0 +1,88 @@
+from django.urls import path
+
+from tasks.views import (
+    UserLoginView,
+    UserRegistrationView,
+    UserPasswordChangeView,
+    ProjectListView,
+    ProjectCreateView,
+    ProjectUpdateView,
+    ProjectDeleteView,
+    TaskCreateView,
+    ProjectTaskListView,
+    ProfileDetailView,
+    ProfileUpdateView,
+    TaskListView,
+    TaskDetailView,
+    ProjectDetailView,
+    JoinProjectView,
+    GenerateCodeView,
+    ChatMessagesView,
+    LogoutView,
+    TaskUpdateView,
+    TaskDeleteView,
+    IndexView
+)
+
+urlpatterns = [
+    path("", IndexView.as_view(), name="index"),
+    path("accounts/login/", UserLoginView.as_view(), name="login"),
+    path("accounts/logout/", LogoutView.as_view(), name="logout"),
+    path("accounts/register/", UserRegistrationView.as_view(), name="register"),
+    path("accounts/password-change/", UserPasswordChangeView.as_view(), name="password-change"),
+    path("projects/",
+         ProjectListView.as_view(),
+         name="project-list"
+         ),
+    path("projects/<int:pk>/",
+         ProjectDetailView.as_view(),
+         name="project-detail"
+         ),
+    path("projects/<int:pk>/project_tasks/",
+         ProjectTaskListView.as_view(),
+         name="project-task-list"),
+    path("projects/<int:pk>/tasks/",
+         TaskListView.as_view(),
+         name="task-list"),
+    path("projects/<int:pk>/tasks/<int:task_pk>/",
+         TaskDetailView.as_view(),
+         name="task-detail"),
+    path("projects/<int:pk>/tasks/add/",
+         TaskCreateView.as_view(),
+         name="task-add"),
+    path("projects/<int:pk>/tasks/<int:task_pk>/update/",
+         TaskUpdateView.as_view(),
+         name="task-update"),
+    path("projects/<int:pk>/tasks/<int:task_pk>/delete/",
+         TaskDeleteView.as_view(),
+         name="task-delete"),
+    path("projects/create/",
+         ProjectCreateView.as_view(),
+         name="project-create"
+         ),
+    path("projects/<int:pk>/update/",
+         ProjectUpdateView.as_view(),
+         name="project-update"
+         ),
+    path("projects/<int:pk>/delete/",
+         ProjectDeleteView.as_view(),
+         name="project-delete"),
+    path("projects/<int:pk>/invitation/",
+         GenerateCodeView.as_view(),
+         name="project-invitation"),
+    path("projects/join/",
+         JoinProjectView.as_view(),
+         name="project-join"),
+    path("projects/<int:pk>/chat/",
+         ChatMessagesView.as_view(),
+         name="project-chat"),
+    path("profile/",
+         ProfileDetailView.as_view(),
+         name="profile-detail"
+         ),
+    path("profile/edit/",
+         ProfileUpdateView.as_view(),
+         name="profile-edit")
+]
+
+app_name = "tasks"

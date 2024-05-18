@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+    <h2>Chat</h2>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="datta-example-modal-content">
+                {% for message in messages %}
+                  <div class="messages {% if message.sender == request.user %}sent-by-me{% else %}sent-by-others{% endif %}">
+                    <div>{% if message.sender == request.user %}Me{% else %}{{ message.sender.username }}{% endif %} ({{ message.sender.position }})</div>
+                    <p>{{ message.message }}</p>
+                  </div>
+                {% empty %}
+                  <h5>No messages available</h5>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <!-- Message submission form -->
+    <form action="" method="post" novalidate class="chat__form">
+      {% csrf_token %}
+      <div class="form-group chat__input">
+        {{ message_form.message }}
+      </div>
+      <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+{% endblock %}

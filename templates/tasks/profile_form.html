@@ -1,0 +1,26 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Edit Profile</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <form action="" method="post" novalidate enctype="multipart/form-data">
+                {% csrf_token %}
+                  {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
