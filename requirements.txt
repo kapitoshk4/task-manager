@@ -5,7 +5,9 @@ Django==4.2.11
 django-bootstrap-v5==1.0.11
 django-debug-toolbar==4.3.0
 drawio==0.0.10
+gunicorn==22.0.0
 networkx==3.3
+packaging==24.0
 pillow==10.3.0
 psycopg2==2.9.9
 soupsieve==2.5
