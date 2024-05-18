@@ -2,7 +2,6 @@ import uuid
 
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.db.models import Q
@@ -39,11 +38,14 @@ class IndexView(generic.View):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            num_projects = (
-                    Project.objects.filter(creator=request.user).count() +
-                    Project.objects.filter(assignees=request.user).distinct().count()
-            )
+            user_projects = Project.objects.filter(
+                Q(creator=request.user) | Q(assignees=request.user)
+            ).distinct()
+
+            project_ids = set(user_projects.values_list('id', flat=True))
+            num_projects = len(project_ids)
             num_tasks = Task.objects.filter(creator=request.user).count()
+
             context = {
                 "num_projects": num_projects,
                 "num_tasks": num_tasks
