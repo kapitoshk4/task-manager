@@ -468,7 +468,10 @@ class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         profile = form.save(commit=False)
         profile.user = self.request.user
-        profile.profile_image = self.request.FILES.get("profile_image")
+        new_profile_image = self.request.FILES.get("profile_image")
+        if new_profile_image:
+            profile.profile_image = new_profile_image
+
         profile.save()
 
         return super().form_valid(form)
