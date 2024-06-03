@@ -207,7 +207,7 @@ class ProjectTaskSearchForm(forms.Form):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Worker
-        fields = ["first_name", "last_name", "email", "position", "profile_image", ]
+        fields = ["first_name", "last_name", "username", "email", "position", "profile_image", ]
 
         widgets = {
             "first_name": forms.TextInput(attrs={
@@ -217,6 +217,10 @@ class ProfileForm(forms.ModelForm):
             "last_name": forms.TextInput(attrs={
                 "class": "form-control",
                 "placeholder": "Last name"
+            }),
+            "username": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Username"
             }),
             "email": forms.EmailInput(attrs={
                 "class": "form-control",
